@@ -1,0 +1,48 @@
+// Predictive Signals — BSV Group demo.
+
+export const PREDICTIVE_SIGNALS = [
+  {
+    id: 'ps-1',
+    agent: 'NOVA',
+    signal: 'rFSH narrative accelerating post-ESHRE 2026 — HMG market share at risk',
+    currentState: 'Merck satellite symposia at ESHRE 2026 reached 2,400+ IVF specialists. Three KOLs already citing rFSH superiority. Sentiment toward urinary gonadotropins dropped -12pts in the last 30 days per congress listening.',
+    trajectory: 'rising',
+    timeToImpact: '0–3 months',
+    confidence: 'high',
+    requiredAction: 'Deploy HMG vs rFSH clinical equivalence one-pager to all MSLs immediately. Engage Cochrane meta-analysis and IVFCARE India data in all IVF KOL interactions.',
+    suggestedAction: { label: 'Open in NOVA', path: '/insights' },
+  },
+  {
+    id: 'ps-2',
+    agent: 'LUCA',
+    signal: 'Dr. Meenakshi Sundaram — alignment collapsed from 74 to 52 in 60 days',
+    currentState: 'Apollo Chennai OBGYN shifted GnRH agonist preference following GSK advisory board. No BSV MSL interaction since April 2026. Risk of becoming a competitor reference voice at FOGSI.',
+    trajectory: 'rising',
+    timeToImpact: '0–6 weeks',
+    confidence: 'high',
+    requiredAction: 'Priority MSL visit from Anita K (South region) with Luprodex/Goserelin clinical equivalence data. Target before her next FOGSI committee meeting.',
+    suggestedAction: { label: 'View in LUCA', path: '/kol-management' },
+  },
+  {
+    id: 'ps-3',
+    agent: 'ARIA',
+    signal: 'ESHRE 2026 — BSV absent from satellite symposia while Merck and Organon dominated',
+    currentState: 'BSV had no satellite event at ESHRE 2026. Gonal-f and Puregon ran 3 combined sessions reaching ~6,000 attendees. Share of scientific voice at ESHRE dropped to 12%.',
+    trajectory: 'stable',
+    timeToImpact: '6–12 months',
+    confidence: 'medium',
+    requiredAction: 'Submit ESHRE 2027 satellite symposium proposal. Commission MINICOV final data publication for congress use. Engage Dr. Kamini Rao and Dr. Hrishikesh Pai as faculty.',
+    suggestedAction: { label: 'Open in ARIA', path: '/congress' },
+  },
+  {
+    id: 'ps-4',
+    agent: 'NOVA',
+    signal: 'Anti-D compliance gap widening in Tier 2/3 — sensitisation cases emerging',
+    currentState: 'MSL field reports show stock interruptions in 4 district hospitals; 3 confirmed sensitisation cases in non-compliant patients in Q2 2026. Without an institutional supply programme, trend will worsen ahead of monsoon delivery season.',
+    trajectory: 'rising',
+    timeToImpact: '0–3 months',
+    confidence: 'high',
+    requiredAction: 'Fast-track institutional bulk-supply proposal for Tier 2/3 hospitals. Engage Dr. Shakuntala Chhabra (Wardha) as clinical champion for rural OBGYN outreach.',
+    suggestedAction: { label: 'Open in NOVA', path: '/insights' },
+  },
+];
