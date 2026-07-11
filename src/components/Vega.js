@@ -353,7 +353,7 @@ function ImpactOutcomes() {
           </div>
           <div className="rounded-lg border border-auri-border bg-auri-card p-4 text-center">
             <div className="text-2xl font-semibold text-auri-text">{romi.returnPerPound}</div>
-            <div className="text-[11px] text-auri-muted mt-1">Return per £1 invested</div>
+            <div className="text-[11px] text-auri-muted mt-1">Return per $1 invested</div>
           </div>
         </div>
         <div className="overflow-x-auto">

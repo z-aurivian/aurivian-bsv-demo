@@ -56,14 +56,14 @@ export const VEGA_CARE_GAP_CLOSURE = [
 ];
 
 export const VEGA_ROMI = {
-  netValueCreated: '₹18.4Cr',
+  netValueCreated: '$2.2M',
   roiPct: '162%',
-  returnPerPound: '₹2.62 per ₹1 invested',
+  returnPerPound: '$2.62 per $1 invested',
   rows: [
-    { category: 'Prescription growth attributed to MA', value: '₹14.1Cr', methodology: 'HCPs with high MA engagement show 1.9× higher BSV prescribing — difference-in-difference vs control group' },
-    { category: 'Anti-D compliance programme — avoided complications', value: '₹3.2Cr', methodology: 'Prevented Rh sensitisation cases × avoided haemolytic disease management cost' },
-    { category: 'Competitive revenue protection', value: '₹4.8Cr', methodology: 'Estimated prescribing prevented from shifting to rFSH or imported GnRH analogues' },
-    { category: 'Total MA investment', value: '-₹13.8Cr', methodology: 'Full Medical Affairs budget — MSL field team, advisory boards, congress, CME content' },
+    { category: 'Prescription growth attributed to MA', value: '$1.7M', methodology: 'HCPs with high MA engagement show 1.9× higher BSV prescribing — difference-in-difference vs control group' },
+    { category: 'Anti-D compliance programme — avoided complications', value: '$385K', methodology: 'Prevented Rh sensitisation cases × avoided haemolytic disease management cost' },
+    { category: 'Competitive revenue protection', value: '$577K', methodology: 'Estimated prescribing prevented from shifting to rFSH or imported GnRH analogues' },
+    { category: 'Total MA investment', value: '-$1.65M', methodology: 'Full Medical Affairs budget — MSL field team, advisory boards, congress, CME content' },
   ],
 };
 
