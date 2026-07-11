@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSV Group · Pulse Intelligence · July 11, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:     #F5F0E9;
+  --paper:     #EDE8DC;
+  --paper-dk:  #E4DECE;
+  --ink:       #1A1612;
+  --ink-mid:   #3D3530;
+  --ink-lt:    #7A6E65;
+  --rule:      #D4CEC4;
+  --teal:      #0D6E6E;
+  --teal-lt:   #1A8B9B;
+  --amber:     #B5540A;
+  --amber-lt:  #E8780F;
+  --rose:      #8B2635;
+  --sage:      #4A6741;
+  --purple:    #5B3F7E;
+  --font-serif: 'Libre Baskerville', Georgia, serif;
+  --font-mono:  'DM Mono', 'IBM Plex Mono', monospace;
+  --font-sans:  'DM Sans', 'Inter', -apple-system, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--cream);
+  color: var(--ink);
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--teal); }
+
+/* ── SHELL ─────────────────────────────────── */
+#shell {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  grid-template-rows: 48px 1fr;
+  grid-template-areas: "topbar topbar" "sidebar main";
+  height: 100vh;
+  overflow: hidden;
+  transition: grid-template-columns 0.22s ease;
+}
+#shell.collapsed { grid-template-columns: 0px 1fr; }
+
+/* ── TOPBAR ────────────────────────────────── */
+#topbar {
+  grid-area: topbar;
+  background: rgba(245,240,232,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+.topbar-left  { display: flex; align-items: center; gap: 10px; }
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+.topbar-wordmark { font-family: 'Michroma', sans-serif; font-size: 13px; color: var(--ink); letter-spacing: 0.06em; }
+.topbar-wordmark span { color: var(--teal); }
+.topbar-divider { width: 1px; height: 18px; background: var(--rule); }
+.topbar-product { font-size: 10px; font-weight: 500; color: var(--ink-lt); letter-spacing: 0.06em; text-transform: uppercase; }
+.bsv-chip { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; background: rgba(13,110,110,0.10); border: 1px solid rgba(13,110,110,0.30); color: var(--teal); }
+.topbar-date { font-size: 10px; color: var(--ink-lt); letter-spacing: 0.03em; }
+
+.btn-listen {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(13,110,110,0.08); border: 1px solid var(--teal);
+  border-radius: 5px; padding: 5px 10px;
+  font-family: var(--font-sans); font-size: 10px; font-weight: 500;
+  color: var(--teal); letter-spacing: 0.04em; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-listen:hover { background: rgba(13,110,110,0.15); }
+.btn-listen.playing { background: rgba(13,110,110,0.15); }
+.listen-dot { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite; }
+
+/* ── AUDIO BAR ─────────────────────────────── */
+#audio-bar {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 500;
+  background: var(--ink); border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 20px;
+  align-items: center; gap: 14px;
+}
+#audio-bar.open { display: flex; }
+.audio-play-btn { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: var(--teal); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s; }
+.audio-play-btn:hover { opacity: 0.85; }
+.audio-play-icon { font-size: 11px; color: #fff; margin-left: 2px; }
+.audio-pause-icon { font-size: 11px; color: #fff; }
+.audio-meta { display: flex; flex-direction: column; gap: 1px; min-width: 180px; }
+.audio-title { font-size: 11px; font-weight: 600; color: var(--cream); }
+.audio-subtitle { font-size: 9px; color: rgba(245,240,232,0.55); }
+.audio-progress-wrap { flex: 1; display: flex; align-items: center; gap: 10px; }
+.audio-track { flex: 1; height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; cursor: pointer; position: relative; }
+.audio-fill { height: 100%; background: var(--teal); border-radius: 2px; width: 0%; transition: width 0.25s linear; }
+.audio-time { font-size: 9px; color: rgba(245,240,232,0.55); white-space: nowrap; min-width: 80px; text-align: right; }
+.audio-close { background: none; border: none; color: rgba(245,240,232,0.5); cursor: pointer; font-size: 16px; line-height: 1; padding: 4px; transition: color 0.15s; }
+.audio-close:hover { color: var(--cream); }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── SIDEBAR TOGGLE ────────────────────────── */
+#sidebar-toggle {
+  position: fixed; left: 220px; top: 50%; transform: translateY(-50%);
+  width: 14px; height: 36px;
+  background: var(--paper); border: 1px solid var(--rule); border-left: none;
+  border-radius: 0 4px 4px 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--ink-lt);
+  z-index: 200; transition: left 0.22s ease;
+}
+#shell.collapsed #sidebar-toggle { left: 0px; }
+
+/* ── SIDEBAR ───────────────────────────────── */
+#sidebar { grid-area: sidebar; background: var(--paper); border-right: 1px solid var(--rule); overflow-y: auto; overflow-x: hidden; transition: opacity 0.2s ease; }
+#shell.collapsed #sidebar { opacity: 0; pointer-events: none; }
+.sidebar-inner { padding: 12px 0; min-width: 232px; }
+.sidebar-section-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-lt); padding: 0 12px 6px; margin-top: 10px; }
+.brief-card { padding: 9px 12px; cursor: pointer; border-left: 2px solid transparent; transition: background 0.13s; position: relative; }
+.brief-card:hover { background: rgba(13,110,110,0.04); }
+.brief-card.active { border-left-color: var(--teal); background: rgba(13,110,110,0.06); }
+.brief-card-title { font-size: 11px; font-weight: 500; color: var(--ink-mid); line-height: 1.4; margin-bottom: 2px; }
+.brief-card.active .brief-card-title { color: var(--ink); }
+.brief-card-meta { font-size: 9px; color: var(--ink-lt); letter-spacing: 0.02em; }
+.new-dot { width: 5px; height: 5px; background: var(--teal); border-radius: 50%; position: absolute; top: 9px; right: 10px; animation: pulse-dot 2.5s ease-in-out infinite; }
+.sidebar-rule { height: 1px; background: var(--rule); margin: 10px 12px; }
+.nav-item { display: flex; align-items: center; gap: 7px; padding: 7px 12px; cursor: pointer; font-size: 11px; font-weight: 500; color: var(--ink-lt); transition: background 0.13s, color 0.13s; text-decoration: none; }
+.nav-item:hover { background: rgba(13,110,110,0.04); color: var(--ink); }
+.nav-item.active { color: var(--teal); background: rgba(13,110,110,0.06); border-left: 2px solid var(--teal); }
+.nav-icon { font-size: 12px; width: 14px; text-align: center; opacity: 0.7; }
+.nav-item.active .nav-icon { opacity: 1; }
+
+/* ── MAIN ──────────────────────────────────── */
+#main { grid-area: main; overflow-y: auto; background: var(--cream); }
+.view { display: none; }
+.view.active { display: block; }
+.brief-content { display: none; }
+.brief-content.active { display: block; }
+
+/* ── BRIEF ARTICLE ─────────────────────────── */
+#view-brief { max-width: 780px; margin: 0 auto; padding: 28px 36px 80px; }
+
+.brief-eyebrow { display: flex; align-items: center; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.tag { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+.tag-outline { border: 1px solid var(--teal); color: var(--teal); }
+.tag-filled  { background: var(--teal); color: #fff; }
+.tag-product { background: rgba(13,110,110,0.10); border: 1px solid rgba(13,110,110,0.30); color: var(--teal); }
+.tag-alert   { background: rgba(181,84,10,0.10); border: 1px solid rgba(181,84,10,0.30); color: var(--amber); }
+.eyebrow-date { margin-left: auto; font-size: 10px; color: var(--ink-lt); }
+
+.brief-headline { font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.4; letter-spacing: -0.01em; margin-bottom: 14px; }
+.brief-headline em { color: var(--teal); font-style: italic; }
+.brief-lede { font-size: 13px; font-weight: 400; color: var(--ink-mid); line-height: 1.85; max-width: 64ch; margin-bottom: 16px; }
+
+.brief-meta { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 12px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin-bottom: 22px; }
+.meta-item { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-lt); }
+.meta-value { font-size: 12px; font-weight: 600; color: var(--teal); }
+.meta-value.warn { color: var(--amber); }
+.meta-value.dim  { color: var(--ink-mid); font-weight: 400; }
+
+.situation-room { background: var(--paper); border: 1px solid var(--rule); border-top: 2px solid var(--teal); border-radius: 8px; padding: 18px 20px; margin-bottom: 28px; }
+.situation-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 10px; }
+.situation-body { font-size: 13px; line-height: 1.8; color: var(--ink-mid); }
+.situation-body strong { color: var(--ink); font-weight: 600; }
+
+.section-rule { height: 1px; background: var(--rule); margin: 28px 0; }
+.brief-section { opacity: 0; transform: translateY(8px); animation: fadeUp 0.35s ease forwards; }
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+.section-number { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.section-num { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; color: var(--teal); display: flex; align-items: center; gap: 6px; }
+.section-num::before { content: ''; display: inline-block; width: 16px; height: 1px; background: var(--teal); opacity: 0.4; }
+.section-cat { font-size: 9px; font-weight: 500; color: var(--ink-lt); letter-spacing: 0.06em; text-transform: uppercase; }
+.section-h2 { font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.45; margin-bottom: 10px; }
+.section-h2 em { color: var(--teal); font-style: italic; }
+.section-h2 strong { color: var(--rose); }
+
+.pills { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+.pill { font-size: 8px; font-weight: 600; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 3px; border: 1px solid; }
+.pill-hot   { background: rgba(181,84,10,0.08);  border-color: rgba(181,84,10,0.35);  color: var(--amber); }
+.pill-alert { background: rgba(139,38,53,0.08);  border-color: rgba(139,38,53,0.35);  color: var(--rose); }
+.pill-watch { background: rgba(13,110,110,0.08); border-color: rgba(13,110,110,0.35); color: var(--teal); }
+.pill-new   { background: rgba(74,103,65,0.08);  border-color: rgba(74,103,65,0.35);  color: var(--sage); }
+
+.section-body { font-size: 13px; line-height: 1.85; color: var(--ink-mid); margin-bottom: 14px; }
+
+.pull-quote { border-left: 3px solid var(--teal); background: var(--paper); padding: 14px 16px; margin: 14px 0; border-radius: 0 6px 6px 0; }
+.pull-quote-text { font-family: var(--font-serif); font-style: italic; font-size: 13px; line-height: 1.7; color: var(--ink); margin-bottom: 6px; }
+.pull-quote-cite { font-size: 9px; color: var(--ink-lt); letter-spacing: 0.04em; }
+
+.alert-box { background: rgba(181,84,10,0.06); border: 1px solid rgba(181,84,10,0.25); border-left: 3px solid var(--amber); border-radius: 6px; padding: 14px 16px; margin: 14px 0; }
+.alert-label { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber); margin-bottom: 6px; }
+.alert-text { font-size: 12px; line-height: 1.7; color: var(--ink-mid); }
+.alert-text strong { color: var(--ink); }
+
+.sources { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+.source-chip { font-size: 9px; font-weight: 500; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink-lt); text-decoration: none; transition: border-color 0.13s, color 0.13s; cursor: pointer; }
+.source-chip:hover { border-color: var(--teal); color: var(--teal); }
+
+.fvq { margin-top: 14px; padding: 12px 14px; background: rgba(13,110,110,0.04); border: 1px dashed rgba(13,110,110,0.25); border-radius: 6px; }
+.fvq-label { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+.fvq-text { font-size: 12px; line-height: 1.7; color: var(--ink-mid); }
+
+/* Comparison table */
+.comp-matrix { width: 100%; border-collapse: collapse; font-size: 11px; margin: 14px 0; }
+.comp-matrix th { font-size: 9px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-lt); padding: 6px 10px; background: var(--paper-dk); border: 1px solid var(--rule); text-align: left; }
+.comp-matrix td { padding: 7px 10px; border: 1px solid var(--rule); color: var(--ink-mid); vertical-align: middle; }
+.comp-matrix tr.hl td { background: rgba(13,110,110,0.05); font-weight: 500; color: var(--ink); }
+.chk { color: var(--teal); font-weight: 700; }
+.crs { color: var(--rose); font-weight: 700; }
+
+/* Bottom line */
+.bottom-line { background: var(--paper); border: 1px solid var(--rule); border-top: 2px solid var(--ink); border-radius: 8px; padding: 18px 20px; margin-top: 28px; }
+.bottom-line-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.bottom-line-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); }
+.bottom-line-items { display: flex; flex-direction: column; gap: 10px; }
+.bottom-line-item { display: flex; gap: 12px; align-items: flex-start; }
+.bl-num { font-family: var(--font-mono); font-size: 10px; font-weight: 600; color: var(--teal); flex-shrink: 0; padding-top: 2px; }
+.bl-text { font-size: 12px; line-height: 1.75; color: var(--ink-mid); }
+.bl-text strong { color: var(--ink); }
+
+.brief-footer { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.footer-sources { font-size: 9px; color: var(--ink-lt); line-height: 1.6; margin-bottom: 6px; }
+.footer-disc { font-size: 9px; color: rgba(122,110,101,0.7); font-style: italic; }
+
+/* ── SIGNAL VELOCITY VIEW ──────────────────── */
+#view-velocity { padding: 28px 32px 80px; }
+.vel-header { margin-bottom: 24px; }
+.vel-title { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.vel-sub { font-size: 12px; color: var(--ink-lt); line-height: 1.6; }
+
+.vel-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+.vel-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.vel-signal { font-size: 12px; font-weight: 600; color: var(--ink); flex: 1; line-height: 1.4; }
+.vel-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+.vb-up   { background: rgba(74,103,65,0.12); color: var(--sage); border: 1px solid rgba(74,103,65,0.3); }
+.vb-dn   { background: rgba(139,38,53,0.10); color: var(--rose); border: 1px solid rgba(139,38,53,0.25); }
+.vb-hot  { background: rgba(181,84,10,0.10); color: var(--amber); border: 1px solid rgba(181,84,10,0.3); }
+.vb-stbl { background: rgba(13,110,110,0.08); color: var(--teal); border: 1px solid rgba(13,110,110,0.25); }
+.vel-bar-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.vel-label { font-size: 9px; color: var(--ink-lt); min-width: 110px; }
+.vel-bar-bg { flex: 1; height: 5px; background: var(--rule); border-radius: 3px; overflow: hidden; }
+.vel-bar { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+.vbar-teal  { background: var(--teal); }
+.vbar-amber { background: var(--amber); }
+.vbar-rose  { background: var(--rose); }
+.vbar-sage  { background: var(--sage); }
+.vel-pct { font-family: var(--font-mono); font-size: 10px; font-weight: 600; min-width: 32px; text-align: right; }
+.vel-note { font-size: 11px; color: var(--ink-lt); line-height: 1.65; }
+
+/* ── NARRATIVE MAP VIEW ─────────────────────── */
+#view-narrative { padding: 28px 32px 80px; }
+.narr-header { margin-bottom: 24px; }
+.narr-title { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.narr-sub { font-size: 12px; color: var(--ink-lt); line-height: 1.6; }
+.narr-timeline { margin-bottom: 28px; }
+.narr-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+@media (max-width: 680px) { .narr-cards { grid-template-columns: 1fr; } }
+@media (max-width: 900px) and (min-width: 680px) { .narr-cards { grid-template-columns: 1fr 1fr; } }
+.narr-card { background: var(--paper); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; }
+.narr-card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.narr-card-name { font-size: 11px; font-weight: 600; color: var(--ink); }
+.narr-badge { font-size: 8px; font-weight: 700; letter-spacing: 0.06em; padding: 2px 7px; border-radius: 3px; flex-shrink: 0; }
+.nb-acc  { background: rgba(74,103,65,0.12); color: var(--sage); border: 1px solid rgba(74,103,65,0.3); }
+.nb-build{ background: rgba(13,110,110,0.10); color: var(--teal); border: 1px solid rgba(13,110,110,0.3); }
+.nb-risk { background: rgba(139,38,53,0.10); color: var(--rose); border: 1px solid rgba(139,38,53,0.25); }
+.nb-watch{ background: rgba(181,84,10,0.10); color: var(--amber); border: 1px solid rgba(181,84,10,0.3); }
+.narr-card-body { font-size: 11px; line-height: 1.65; color: var(--ink-mid); margin-bottom: 8px; }
+.narr-card-driver { font-size: 8px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-lt); margin-bottom: 2px; }
+.narr-card-driver-val { font-size: 9px; color: var(--teal); }
+</style>
+</head>
+<body>
+<div id="shell">
+
+<!-- TOPBAR -->
+<header id="topbar">
+  <div class="topbar-left">
+    <div class="topbar-wordmark">AURI<span>VIAN</span></div>
+    <div class="topbar-divider"></div>
+    <span class="topbar-product">Pulse Intelligence</span>
+    <span class="bsv-chip">BSV Group</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-date">July 11, 2026 &middot; 8:00 AM IST</span>
+  </div>
+</header>
+
+<!-- SIDEBAR TOGGLE -->
+<button id="sidebar-toggle" onclick="toggleSidebar()">&#8249;</button>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-inner">
+
+    <div class="sidebar-section-label">Today's Briefs</div>
+
+    <div class="brief-card active" onclick="switchBrief(this, 'rfsh')">
+      <span class="new-dot"></span>
+      <div class="brief-card-title">rFSH vs HMG — ESHRE 2026 Rebuttal</div>
+      <div class="brief-card-meta">Fertility Portfolio &middot; IVFCARE India &middot; Cochrane</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'antid')">
+      <span class="new-dot"></span>
+      <div class="brief-card-title">Anti-D Compliance Gap — Tier 2/3 Alert</div>
+      <div class="brief-card-meta">Anti-D &middot; MO1 At Risk &middot; 3 Sensitisation Cases</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'luprodex')">
+      <div class="brief-card-title">Luprodex 3-month Protocol — Evidence Shift</div>
+      <div class="brief-card-meta">Luprodex &middot; ENDOCARE &middot; FOGSI Adoption</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'divergence')">
+      <span class="new-dot"></span>
+      <div class="brief-card-title">Dr. Meenakshi Sundaram — Divergence Alert</div>
+      <div class="brief-card-meta">Apollo Chennai &middot; 74&#8594;52 &middot; 14-Week Gap</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'oncofertility')">
+      <div class="brief-card-title">Oncofertility — New KOL Segment Opening</div>
+      <div class="brief-card-meta">Luprodex &middot; GnRH Ovarian Protection &middot; 3 Centres</div>
+    </div>
+
+    <div class="brief-card" onclick="switchBrief(this, 'minicov')">
+      <div class="brief-card-title">MINICOV Interim Data — Minimal Stimulation</div>
+      <div class="brief-card-meta">Fertility Portfolio &middot; OHSS 2.4% vs 8.1%</div>
+    </div>
+
+    <div class="sidebar-rule"></div>
+
+    <div class="sidebar-section-label">Views</div>
+    <div class="nav-item active" id="nav-brief" onclick="showView('brief', this)"><span class="nav-icon">&#9632;</span> Morning Brief</div>
+    <div class="nav-item" id="nav-velocity" onclick="showView('velocity', this)"><span class="nav-icon">&#8599;</span> Signal Velocity</div>
+    <div class="nav-item" id="nav-narrative" onclick="showView('narrative', this)"><span class="nav-icon">&#9685;</span> Narrative Map</div>
+
+    <div class="sidebar-rule"></div>
+
+    <div class="sidebar-section-label">Platform</div>
+    <a class="nav-item" href="https://aurivian-bsv-demo.vercel.app" target="_blank" rel="noopener noreferrer"><span class="nav-icon">&#9675;</span> Link to Aurivian</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- ══ VIEW: BRIEFS ══════════════════════════ -->
+  <div id="view-brief" class="view active">
+
+  <!-- ── BRIEF 1: rFSH vs HMG ─────────────── -->
+  <div id="brief-rfsh" class="brief-content active" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Fertility Portfolio &middot; HMG / FSH</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 8:00 AM IST</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Merck's ESHRE 2026 satellite reached 2,400+ IVF specialists with a batch-consistency attack on urinary FSH. <em>Two published datasets already rebut it — and most KOLs haven't seen them yet.</em>
+    </h1>
+
+    <p class="brief-lede">The rFSH vs urinary gonadotropin debate did not start at ESHRE 2026 — but Merck's satellite symposium reframed it. Their message: recombinant FSH offers superior batch-to-batch consistency, reducing cycle-to-cycle variability. The claim is clinically plausible but not supported by comparative live birth data. Two datasets directly contradict it: the IVFCARE India RCT (BSV-sponsored, 2026) and the Cochrane meta-analysis update (2024). BSV's field team has 72 hours before this narrative sets in KOL memory.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Fertility Portfolio (HMG/FSH)</span></div>
+      <div class="meta-item"><span class="meta-label">Threat Source</span><span class="meta-value warn">&#9679; Merck KGaA Satellite — ESHRE 2026</span></div>
+      <div class="meta-item"><span class="meta-label">Priority</span><span class="meta-value warn">&#9679; Critical · LP5 Activated</span></div>
+      <div class="meta-item"><span class="meta-label">Signal Sources</span><span class="meta-value dim">4 Active</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; 4 Active Signals This Week</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> Merck ran a high-production satellite symposium at ESHRE 2026 titled "Precision Stimulation" — positioning Gonal-f's consistent follicle stimulating activity as a clinical differentiator versus urinary-derived products. Sentiment toward urinary FSH preparations has declined 12 points among IVF specialists under 45 in the 30 days since the congress. The Cochrane meta-analysis (2024) and IVFCARE India RCT show equivalent live birth rates. The counter-narrative requires active MSL field engagement this week — before prescribing inertia compounds.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Clinical Data · IVFCARE India RCT</span></div>
+      <h2 class="section-h2">IVFCARE India: equivalent live birth rates in normal responders. <em>The batch-consistency argument does not translate to clinical outcomes.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; Prioritised · Recurrence 4</span><span class="pill pill-watch">BSV-Sponsored RCT</span></div>
+      <p class="section-body">The IVFCARE India RCT (NCT05412847, published Fertility &amp; Sterility January 2026) enrolled 412 normal responders across 6 Indian IVF centres. Primary endpoint: live birth rate per cycle. Results: urinary HMG arm 38.2% vs recombinant FSH arm 37.9% (p=0.91, non-inferiority met). Secondary endpoints — number of oocytes retrieved, fertilisation rate, embryo quality — were statistically equivalent. The study design directly addresses the consistency objection: all urinary HMG batches were tested against the European Pharmacopoeia standard, with potency variation &lt;2% across the cohort. Merck's batch-consistency framing applies to historical manufacturing standards — not to current BSV HMG supply.</p>
+      <div class="pull-quote">
+        <p class="pull-quote-text">"The equivalence data in normal responders is robust. For my typical IVF patient, the choice between urinary HMG and recombinant FSH should be driven by cost-effectiveness and patient access — not batch variability arguments that no longer apply to modern manufacturing."</p>
+        <span class="pull-quote-cite">— Representative post-ESHRE 2026 KOL commentary &middot; India IVF Specialist Network</span>
+      </div>
+      <div class="sources">
+        <span class="source-chip">IVFCARE India RCT — Fertil Steril Jan 2026</span>
+        <span class="source-chip">MSL Insight AI1 — Prioritised</span>
+        <span class="source-chip">BSV Manufacturing QC Data 2025</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">Did you attend or hear about Merck's "Precision Stimulation" satellite at ESHRE — and how did the batch-consistency framing land with your colleagues? Have you seen the IVFCARE India live birth data head-to-head?</p>
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- S02 -->
+    <div class="brief-section" style="animation-delay:0.10s">
+      <div class="section-number"><span class="section-num">02</span><span class="section-cat">Meta-Analysis · Cochrane 2024</span></div>
+      <h2 class="section-h2">Cochrane 2024 update: no significant difference in live birth or OHSS rates between recombinant and urinary gonadotropins.</h2>
+      <div class="pills"><span class="pill pill-watch">Cochrane Systematic Review</span><span class="pill pill-new">&#9650; High Authority Evidence</span></div>
+      <p class="section-body">The updated Cochrane meta-analysis (2024) synthesised 42 RCTs across 9,141 women comparing recombinant FSH versus urinary gonadotropins (HMG and uFSH) for IVF. Primary outcome: live birth or ongoing pregnancy per woman randomised. RR 1.01 (95% CI 0.97–1.06) — no statistically significant difference. OHSS rates: 3.8% vs 4.2% — again no significant difference. The Cochrane review is the highest-authority signal in the evidence base and directly contradicts the superiority framing in Merck's satellite. MSLs should position it not as "our data" but as the independent scientific consensus.</p>
+      <div class="sources">
+        <span class="source-chip">Cochrane Database Syst Rev — Mar 2024</span>
+        <span class="source-chip">42 RCTs · 9,141 patients</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">In your stimulation protocol decisions, how much weight do you give to Cochrane-level meta-analysis evidence versus single-sponsor conference presentations — and is there a specific aspect of the consistency argument that the meta-analysis doesn't address for your practice?</p>
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- S03 -->
+    <div class="brief-section" style="animation-delay:0.15s">
+      <div class="section-number"><span class="section-num">03</span><span class="section-cat">KOL Watch · Share of Voice</span></div>
+      <h2 class="section-h2"><strong>Share of scientific voice at ESHRE 2026: Gonal-f 27%, BSV Fertility 12%.</strong> <em>The gap is messaging and visibility — not evidence.</em></h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; Accelerating</span><span class="pill pill-alert">&#9660; SOV Gap</span></div>
+      <p class="section-body">ARIA analysis of ESHRE 2026 congress mentions shows Gonal-f at 27% share of scientific voice in gonadotropin-related sessions, versus 12% for BSV's fertility portfolio. The gap is not driven by evidence — it is driven by satellite symposia investment, speaker sponsorship, and abstract volume. Dr. Kamini Rao (Bangalore, Tier 1) and Dr. Narendra Malhotra (Agra, Tier 1) both posted publicly in favour of urinary preparations post-congress. Engaging them now — while the scientific conversation is live — is the highest-leverage action this week.</p>
+      <table class="comp-matrix">
+        <thead>
+          <tr><th>Parameter</th><th>BSV HMG (Humog/Fertigyn)</th><th>Gonal-f (rFSH, Merck)</th></tr>
+        </thead>
+        <tbody>
+          <tr class="hl"><td>Live birth rate (IVFCARE India)</td><td class="chk">38.2% ✓</td><td>37.9%</td></tr>
+          <tr><td>Cochrane meta-analysis LBR</td><td class="chk">Equivalent ✓</td><td>Equivalent</td></tr>
+          <tr><td>Batch consistency claim</td><td>Modern mfr. &lt;2% variation</td><td>Recombinant (defined by structure)</td></tr>
+          <tr><td>Cost per cycle (India)</td><td class="chk">~40% lower ✓</td><td>Premium pricing</td></tr>
+          <tr><td>Availability Tier 2/3</td><td class="chk">Broad ✓</td><td>Limited</td></tr>
+        </tbody>
+      </table>
+      <div class="sources">
+        <span class="source-chip">ARIA ESHRE 2026 SOV Analysis</span>
+        <span class="source-chip">Rao — X (Twitter) Jul 2, 2026</span>
+        <span class="source-chip">Malhotra — LinkedIn Jun 30, 2026</span>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 4 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Deploy the IVFCARE India one-pager</strong> to all 5 MSLs before end of day. Prioritise KOLs attending ESHRE who may have heard the Merck satellite.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Contact Dr. Kamini Rao and Dr. Narendra Malhotra this week</strong> to share the Cochrane update and IVFCARE data. Both are actively posting — window is open now.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Brief field team on manufacturing QC narrative:</strong> BSV HMG batch potency variation &lt;2%. The "consistency" objection applies to older manufacturing standards, not current supply.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">04</span><span class="bl-text"><strong>Submit IVFCARE India data abstract</strong> to India IVF Summit 2026 and NABICON 2026 to reclaim share of scientific voice in domestic congress calendar.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: IVFCARE India RCT (Fertil Steril Jan 2026, NCT05412847); Cochrane Database Syst Rev 2024; ARIA ESHRE 2026 congress analysis; MSL field reports — AI1 Prioritised (4 sources, 3 regions); KOL social monitoring Jul 2026.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for BSV Group Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 2: Anti-D ────────────────────── -->
+  <div id="brief-antid" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-alert">Compliance Alert</span>
+      <span class="tag tag-product">Anti-D &middot; Rh Prophylaxis</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 8:00 AM IST</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Three confirmed Rh sensitisation cases in Q2 2026. <em>Stock interruptions in Maharashtra and Punjab are the root cause — and MO1 compliance is now at risk.</em>
+    </h1>
+
+    <p class="brief-lede">The Anti-D compliance failure in Tier 2/3 hospitals is no longer a theoretical risk — it is a documented patient safety event. BSV MSL field reports from Q2 2026 confirmed three Rh-negative women who were not administered Anti-D prophylaxis due to stock interruptions, and subsequently confirmed sensitisation. The RHOPRO registry study identified cost and availability as the two primary structural barriers. This is both a patient risk and a reputational risk for BSV's role in the maternal health programme.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Anti-D (Anti-Rho(D) Immunoglobulin)</span></div>
+      <div class="meta-item"><span class="meta-label">MO Status</span><span class="meta-value warn">&#9679; MO1 At Risk</span></div>
+      <div class="meta-item"><span class="meta-label">Sensitisation Cases</span><span class="meta-value warn">&#9679; 3 Confirmed Q2 2026</span></div>
+      <div class="meta-item"><span class="meta-label">Affected States</span><span class="meta-value dim">Maharashtra · Punjab · UP</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; MO1 Compliance Below Target</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> BSV's Anti-D compliance MO (MO1) targets coverage of 78% of Rh-negative deliveries in partner hospital networks by Q3 2026. Current field estimate: 64%. The gap is driven by two mechanisms: (1) out-of-pocket cost barriers in Tier 2/3 hospitals where institutional procurement has not been established, and (2) inventory interruptions averaging 3 weeks at 4 confirmed sites. Three sensitisation cases in Q2 are the most concrete patient-harm signal yet. Dr. Chhabra (Wardha) and the Maharashtra MSL are the primary action owners.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Patient Safety · RHOPRO Registry</span></div>
+      <h2 class="section-h2">RHOPRO registry: cost and stock are the primary barriers to Anti-D compliance in Tier 2/3 — not guideline awareness.</h2>
+      <div class="pills"><span class="pill pill-alert">&#9650; Patient Risk</span><span class="pill pill-watch">MO1 · Compliance Target</span></div>
+      <p class="section-body">The RHOPRO observational registry (NCT05621034, completed) analysed Anti-D prophylaxis compliance across 8 Indian hospitals stratified by tier. Tier 1 hospitals: 91% compliance. Tier 2: 68%. Tier 3: 41%. The two primary barriers identified by clinical staff: (1) individual patient cost where institutional procurement is absent (avg ₹1,800–2,400 per vial, not always covered by insurance in secondary/tertiary settings), and (2) supply chain interruptions averaging 2.6 weeks per affected facility per quarter. Guideline awareness was not a primary barrier — 94% of attending obstetricians correctly identified Anti-D prophylaxis as the standard of care. The problem is structural, not educational.</p>
+      <div class="alert-box">
+        <div class="alert-label">&#9650; Sensitisation Cases — Q2 2026</div>
+        <p class="alert-text"><strong>Three confirmed sensitisation cases in Q2 2026 from Maharashtra and Punjab sites.</strong> All three were Rh-negative women where Anti-D was not administered due to stock outages. This is the most severe patient-harm signal in the Anti-D programme to date. Each case represents a lifetime risk of haemolytic disease of the newborn in future pregnancies.</p>
+      </div>
+      <div class="sources">
+        <span class="source-chip">RHOPRO Registry — NCT05621034</span>
+        <span class="source-chip">MSL Field Reports — 4 Sites Q2 2026</span>
+        <span class="source-chip">Indian J Obstet Gynaecol Mar 2026</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">In your hospital or district network, what percentage of Rh-negative deliveries receive Anti-D prophylaxis — and is the primary barrier cost, availability, or something else your institution encounters that we haven't captured in the RHOPRO data?</p>
+      </div>
+    </div>
+
+    <div class="section-rule"></div>
+
+    <!-- S02 -->
+    <div class="brief-section" style="animation-delay:0.10s">
+      <div class="section-number"><span class="section-num">02</span><span class="section-cat">Strategic Response · Institutional Programme</span></div>
+      <h2 class="section-h2">Bulk institutional supply is the structural fix — individual prescribing will not close the gap at Tier 2/3 scale.</h2>
+      <div class="pills"><span class="pill pill-hot">&#8593; Priority Action</span><span class="pill pill-new">&#9650; MO1 Recovery Path</span></div>
+      <p class="section-body">The RHOPRO data point to a single intervention that addresses both cost and availability: institutional bulk supply agreements with Tier 2 district hospitals and municipal maternity wards. Under a bulk supply model, Anti-D is stocked in the hospital pharmacy and dispensed at point-of-delivery without a patient-funded purchase, eliminating the out-of-pocket barrier. Bulk pricing through BSV's institutional programme reduces per-unit cost by 22–28% relative to retail pharmacy. Dr. Chhabra (Wardha Rural Hospital, Maharashtra) has expressed willingness to pilot the programme and is well-positioned as a rural obstetrics champion for FOGSI.</p>
+      <div class="sources">
+        <span class="source-chip">BSV Institutional Pricing Programme 2026</span>
+        <span class="source-chip">Dr. Chhabra — Field MSL Report</span>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Fast-track institutional bulk-supply agreements</strong> at the 4 identified sites in Maharashtra and Punjab. Target: zero stock interruptions for Q3 2026.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Engage Dr. Chhabra (Wardha) as institutional programme champion</strong> for the FOGSI rural obstetrics network — his peer influence in Maharashtra Tier 2/3 is the fastest compliance accelerant available.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Brief the medical team on Q2 sensitisation cases</strong> — this is a patient safety signal that warrants escalation to the MA head (Dr. Pradeep) and Dr. Priyanka Joshi for programme review.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: RHOPRO observational registry (NCT05621034); MSL field reports Q2 2026 (4 sites, Maharashtra + Punjab); Indian J Obstet Gynaecol compliance analysis Mar 2026; BSV institutional pricing programme data.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for BSV Group Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 3: Luprodex ─────────────────── -->
+  <div id="brief-luprodex" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Luprodex &middot; Leuprolide</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 8:00 AM IST</span>
+    </div>
+
+    <h1 class="brief-headline">
+      ENDOCARE trial: the 3-month Luprodex protocol achieves equal pain control with half the injections. <em>FOGSI 2026 data are shifting early-adopter KOLs — the broader network has not yet heard the story.</em>
+    </h1>
+
+    <p class="brief-lede">Endometriosis management with GnRH agonists has historically defaulted to monthly depot formulations. The ENDOCARE trial (completed, 12 Indian sites) directly compared Luprodex 3-month vs 6-month protocols for Stage II–IV endometriosis. Primary endpoint results were presented at FOGSI 2026: 3-month protocol achieved non-inferiority on pelvic pain scores (VAS at 24 weeks) while reducing injection burden from 6 to 2 over the treatment course. Early-adopter KOLs in the FOGSI network have begun recommending the 3-month protocol. The broader tier-2 prescriber network is not yet aware.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Luprodex (Leuprolide Depot)</span></div>
+      <div class="meta-item"><span class="meta-label">Indication</span><span class="meta-value dim">Stage II–IV Endometriosis</span></div>
+      <div class="meta-item"><span class="meta-label">MO Status</span><span class="meta-value warn">&#9679; MO2 Low · Confidence Gap</span></div>
+      <div class="meta-item"><span class="meta-label">Data Source</span><span class="meta-value dim">ENDOCARE Trial · FOGSI 2026 Abstract</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; 3 Active Signals</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> The FOGSI 2026 abstract presentation of ENDOCARE was well-received by the 200 attendees in the session, but abstracts reach only a fraction of the prescriber base. The 3-month protocol has a meaningful patient convenience advantage — reduced clinic visits and injections — which is particularly significant in India's Tier 2/3 settings where hospital visits have a high cost in lost work time. MO2 (GnRH agonist protocol confidence) is currently Low. The ENDOCARE data are the primary evidence package to close that gap.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Clinical Data · ENDOCARE Trial</span></div>
+      <h2 class="section-h2">ENDOCARE: VAS pelvic pain 4.1 (3-month) vs 4.0 (6-month) at 24 weeks. Non-inferiority met. Injection burden: 2 vs 6.</h2>
+      <div class="pills"><span class="pill pill-new">&#9650; FOGSI 2026 Data</span><span class="pill pill-watch">Non-Inferiority Confirmed</span></div>
+      <p class="section-body">ENDOCARE enrolled 218 women with laparoscopically confirmed Stage II–IV endometriosis across 12 centres (AIIMS Delhi, KEM Mumbai, Bangalore Baptist, and 9 regional sites). Primary endpoint: VAS pelvic pain score at 24 weeks. Results: 3-month protocol arm 4.1 vs 6-month arm 4.0 (difference 0.1, 95% CI −0.4 to 0.6; non-inferiority margin 1.5 — met). Secondary endpoints: dysmenorrhoea VAS, deep dyspareunia VAS — all equivalent. Bone mineral density changes at 24 weeks: comparable between arms. The key differentiator is patient burden: 2 injections vs 6 over the treatment course, with 4 fewer hospital visits required in the 3-month arm. Patient satisfaction score (5-point Likert) was significantly higher in the 3-month arm (4.2 vs 3.8, p=0.03).</p>
+      <div class="pull-quote">
+        <p class="pull-quote-text">"The 3-month data are compelling for my patients who travel more than an hour to reach me. Same outcomes, dramatically better compliance. I've already switched my new-start endometriosis patients to the 3-month protocol."</p>
+        <span class="pull-quote-cite">— Early adopter KOL post-FOGSI 2026 &middot; Regional Gynaecology Network &middot; January 2026</span>
+      </div>
+      <div class="sources">
+        <span class="source-chip">ENDOCARE Trial — NCT04832156 · Completed</span>
+        <span class="source-chip">FOGSI 2026 Abstract — Jan 2026</span>
+        <span class="source-chip">MSL KOL Feedback — 3 Early Adopters</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">Have you had a chance to look at the ENDOCARE 3-month vs 6-month data — and for your patient population, is the reduced injection burden a meaningful clinical differentiator, or is there another aspect of the protocol that would drive your prescribing decision?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 2 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Disseminate ENDOCARE abstract to all FOGSI-affiliated KOLs</strong> in the BSV network who did not attend the session. Target 40 gynaecologists in the Tier 2/3 prescriber pool.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Develop a 3-month protocol adoption guide</strong> for MSLs — including patient selection criteria, transition instructions for existing 1-month patients, and the patient satisfaction data for the convenience conversation.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: ENDOCARE trial (NCT04832156, 12 sites, 218 patients); FOGSI 2026 abstract presentation January 2026; MSL KOL feedback reports Q1 2026.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for BSV Group Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 4: Divergence ───────────────── -->
+  <div id="brief-divergence" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-alert">KOL Divergence Alert</span>
+      <span class="tag tag-product">LUCA · Tier 1 Watch</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 8:00 AM IST</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Dr. S. Meenakshi Sundaram — alignment dropped 22 points after GSK advisory board. <em>No BSV MSL contact in 14 weeks. Risk of competitor vocal advocacy at FOGSI.</em>
+    </h1>
+
+    <p class="brief-lede">Dr. S. Meenakshi Sundaram (Apollo Hospitals Chennai, Senior Consultant OB/GYN, Tier 1 KOL, influence score 78) attended a GSK advisory board in March 2026 focused on reproductive immunology and maternal health. Her LUCA alignment score has dropped from 74 to 52 — a 22-point decline — in the 90 days since. Her last logged BSV MSL contact is 14 weeks ago. She is a frequent FOGSI speaker and her advocacy on competitor products in that forum would reach 300+ gynaecologists per session. This is the most urgent KOL engagement gap in the BSV programme.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">KOL</span><span class="meta-value">Dr. S. Meenakshi Sundaram</span></div>
+      <div class="meta-item"><span class="meta-label">Institution</span><span class="meta-value dim">Apollo Hospitals Chennai</span></div>
+      <div class="meta-item"><span class="meta-label">Alignment Trend</span><span class="meta-value warn">&#9660; 74 &#8594; 52 · At Risk</span></div>
+      <div class="meta-item"><span class="meta-label">Last MSL Contact</span><span class="meta-value warn">&#9679; 14 Weeks</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; Urgent · Tier 1 KOL At Risk</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> LUCA has tracked three signals associated with the alignment decline: (1) Sundaram's attendance at the GSK advisory board (March 2026) — GSK's reproductive health pipeline includes maternal immunology and Rh disease prevention research; (2) two LinkedIn posts in April and May referencing "next-generation approaches to maternal Rh prophylaxis" without naming BSV products; (3) the absence of any BSV scientific interaction in 14 weeks, which means no counter-narrative has been offered. The divergence may reflect genuine scientific interest in GSK's pipeline rather than dissatisfaction with BSV — but without engagement, the distinction cannot be established. The 14-week silence is the actionable problem.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">LUCA Alert · Alignment Decline</span></div>
+      <h2 class="section-h2"><strong>Alert: Sundaram divergence.</strong> <em>GSK advisory board participation is the trigger — and the 14-week silence is the window closing.</em></h2>
+      <div class="pills"><span class="pill pill-alert">&#9660; Diverging · −22 pts</span><span class="pill pill-hot">&#9679; Urgent · 14-Week Gap</span></div>
+      <p class="section-body">Dr. Sundaram's professional profile makes this divergence particularly sensitive. She is a Tier 1 KOL in the South India OB/GYN network, a frequent FOGSI presenter, and a recognised voice in maternal safety discussions in Tamil Nadu and Kerala. Her alignment with BSV products — particularly Anti-D — has historically been strong (score 74 in January 2026). The GSK advisory board attendance does not necessarily indicate she is recommending competitor products. It indicates she is actively engaging with the scientific framing GSK is offering. Without a BSV scientific interaction, that framing will go uncountered.</p>
+      <div class="alert-box">
+        <div class="alert-label">&#9650; FOGSI Advocacy Risk</div>
+        <p class="alert-text"><strong>Dr. Sundaram is scheduled to speak at FOGSI Hyderabad 2026 (January 2027, planning cycle begins Q3 2026).</strong> If her alignment has not recovered by Q4 2026, there is a meaningful risk she will reference competitor evidence frameworks in her FOGSI session — reaching 300+ gynaecologists in a single interaction.</p>
+      </div>
+      <div class="sources">
+        <span class="source-chip">LUCA Alignment Tracker — Jul 11, 2026</span>
+        <span class="source-chip">GSK Advisory Board Intel — Mar 2026</span>
+        <span class="source-chip">Sundaram LinkedIn — Apr/May 2026</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">We've been following your recent research interests in maternal Rh prophylaxis and wanted to share two datasets that may be relevant to your current thinking — the RHOPRO registry analysis and the latest WHO guidance on Rh disease prevention. Would a one-to-one scientific exchange be useful before FOGSI planning season?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Priority MSL contact with Dr. Sundaram within 5 business days.</strong> Lead with RHOPRO registry data and the Anti-D compliance gap — frame it as a shared patient safety conversation, not a product pitch.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Consider inviting Dr. Sundaram to the BSV Maternal Health Advisory Board</strong> (Q4 2026) as a South India network champion — provide a re-engagement mechanism that matches the scientific gravity of the GSK advisory board.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Flag to Dr. Priyanka Joshi (Medical Excellence):</strong> this divergence warrants a senior-level relationship check-in given Sundaram's FOGSI 2027 speaker role and Tier 1 influence status.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: LUCA alignment scoring system — 90-day trend Jul 2026; GSK advisory board attendance intel Mar 2026; Sundaram LinkedIn monitoring Apr–May 2026; RHOPRO registry as engagement tool.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for BSV Group Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 5: Oncofertility ────────────── -->
+  <div id="brief-oncofertility" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Luprodex &middot; Oncofertility</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 8:00 AM IST</span>
+    </div>
+
+    <h1 class="brief-headline">
+      Three gynecologic oncologists are asking about GnRH agonist ovarian protection. <em>Luprodex is scientifically positioned — but BSV has no oncofertility MSL materials.</em>
+    </h1>
+
+    <p class="brief-lede">A new KOL segment is emerging at the intersection of oncology and reproductive medicine. Three gynecologic oncologists across Bangalore, Delhi, and Chennai have independently asked BSV MSLs about GnRH agonist protocols for ovarian protection before chemotherapy in pre-menopausal cancer patients. This is an established and guideline-supported indication for leuprolide. BSV's Luprodex is mechanistically and clinically positioned for this segment — but no MSL briefing kit, no targeted KOL list, and no publications plan exist for the oncofertility audience today.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Luprodex (Leuprolide)</span></div>
+      <div class="meta-item"><span class="meta-label">Indication</span><span class="meta-value dim">Oncofertility · Ovarian Protection</span></div>
+      <div class="meta-item"><span class="meta-label">Opportunity Status</span><span class="meta-value">&#9650; New Segment · MO4 Low</span></div>
+      <div class="meta-item"><span class="meta-label">KOL Signals</span><span class="meta-value dim">3 Unsolicited Inquiries · Q2 2026</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; Emerging Segment Signal</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> GnRH agonist-mediated ovarian protection (also called gonadotropin-releasing hormone agonist co-treatment or GnRHa-OP) is recommended by ESMO 2020 and ASCO 2018 guidelines for pre-menopausal women undergoing chemotherapy who wish to preserve fertility. Three independent unsolicited MSL inquiries from gynecologic oncologists in Q2 2026 indicate that this segment is reaching out to BSV without any targeted engagement. The opportunity: Luprodex is already on the BSV portfolio with established clinical evidence; the segment needs dedicated materials, not new product development. MO4 (oncology hormonal therapy) is currently Low.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Evidence Base · ESMO / ASCO Guidelines</span></div>
+      <h2 class="section-h2">ESMO 2020 + ASCO 2018 guidelines recommend GnRH agonist co-treatment for ovarian protection in pre-menopausal chemotherapy patients who wish to conceive.</h2>
+      <div class="pills"><span class="pill pill-new">&#9650; Guideline-Supported</span><span class="pill pill-watch">Pre-Menopausal Cancer</span></div>
+      <p class="section-body">Both major oncology society guidelines support GnRH agonist co-treatment as an option for ovarian protection during chemotherapy in pre-menopausal women. The mechanism: GnRH agonist induces a hypoestrogenic state that reduces ovarian follicle sensitivity to chemotherapy-induced gonadotoxicity. Breast cancer is the most common indication, followed by lymphoma and early-stage cervical cancer. Leuprolide (Luprodex) is one of the agents explicitly mentioned in the ASCO 2018 guidance. The oncofertility conversation in India is led by gynaecologic oncologists who manage both the cancer and the reproductive counselling — making them the primary target KOL segment for this indication.</p>
+      <div class="sources">
+        <span class="source-chip">ESMO Guidelines — Ovarian Function Preservation 2020</span>
+        <span class="source-chip">ASCO Fertility Preservation Guidelines 2018</span>
+        <span class="source-chip">Reprod BioMed Online — GnRHa-OP Meta-Analysis May 2026</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">For your pre-menopausal patients undergoing chemotherapy who have expressed a desire for future fertility — are you currently using GnRH agonist co-treatment as part of the fertility preservation conversation, and what are the main barriers to implementation in your oncology setting?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Develop an oncofertility MSL briefing kit</strong> — one-pager on GnRH agonist ovarian protection (guideline summary, leuprolide dosing in this context, patient selection criteria). Do not require new clinical data — guidelines are sufficient.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Identify 5 gynecologic oncology centres</strong> for targeted engagement in Bangalore, Delhi, Chennai, Mumbai, and Pune — the cities where the unsolicited inquiries originated and where BSV has existing MSL coverage.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Schedule advisory board with Dr. Vidya Bhat (Bangalore) and Dr. Nutan Agarwal (Delhi)</strong> — both are gynecologic oncologists with reproductive medicine interests who have been cited in MSL field reports as potential programme champions.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: ESMO 2020 ovarian function preservation guidelines; ASCO 2018 fertility preservation guidelines; Reprod BioMed Online GnRHa-OP meta-analysis May 2026; BSV MSL field reports Q2 2026 (3 unsolicited oncofertility inquiries).</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for BSV Group Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  <!-- ── BRIEF 6: MINICOV ──────────────────── -->
+  <div id="brief-minicov" class="brief-content" style="max-width:780px;margin:0 auto;padding:28px 36px 80px;">
+
+    <div class="brief-eyebrow">
+      <span class="tag tag-outline">Intelligence Brief</span>
+      <span class="tag tag-product">Fertility Portfolio &middot; HMG</span>
+      <span class="eyebrow-date">July 11, 2026 &middot; 8:00 AM IST</span>
+    </div>
+
+    <h1 class="brief-headline">
+      MINICOV interim: OHSS 2.4% vs 8.1% in minimal stimulation IVF with urinary HMG. <em>Cost-driven protocols are the fastest-growing IVF segment in India — and BSV HMG is the natural product.</em>
+    </h1>
+
+    <p class="brief-lede">Minimal stimulation IVF (mini-IVF) is growing in academic and clinical interest across India, driven by cost pressures, PCOS prevalence, and the desire to reduce OHSS risk in poor responders. The MINICOV trial (BSV Group, NCT05189673, active, 4 sites) has released interim data showing OHSS rates of 2.4% in the urinary HMG mini-IVF arm versus 8.1% in the conventional stimulation arm. This is a compelling safety signal — particularly for the PCOS patient population where OHSS is the primary iatrogenic risk. No dedicated messaging or materials exist for the mini-IVF segment today.</p>
+
+    <div class="brief-meta">
+      <div class="meta-item"><span class="meta-label">Product Focus</span><span class="meta-value">Fertility Portfolio (Urinary HMG)</span></div>
+      <div class="meta-item"><span class="meta-label">Trial</span><span class="meta-value dim">MINICOV — Active · Interim Data</span></div>
+      <div class="meta-item"><span class="meta-label">OHSS Rate</span><span class="meta-value">&#9650; 2.4% vs 8.1%</span></div>
+      <div class="meta-item"><span class="meta-label">Target Population</span><span class="meta-value dim">PCOS · Poor Responders · Cost-Sensitive</span></div>
+    </div>
+
+    <div class="situation-room">
+      <div class="situation-label">&#9679; Situation Room &nbsp;&middot;&nbsp; Emerging Segment Signal</div>
+      <p class="situation-body"><strong>The strategic picture:</strong> Mini-IVF is not yet a dominant protocol in India but is growing rapidly — particularly in tier-2 IVF centres where cost is the primary patient barrier. PCOS is the most prevalent cause of infertility in India (estimated 10–15% of reproductive-age women), and PCOS patients are at the highest risk of OHSS in conventional stimulation. The MINICOV interim OHSS data of 2.4% versus 8.1% is a meaningful safety differentiator that addresses the primary clinical concern in this population. BSV HMG's lower cost relative to rFSH also makes it the natural economic choice for mini-IVF protocols. The opportunity is to establish BSV HMG as the reference product for minimal stimulation before rFSH manufacturers develop targeted messaging in this space.</p>
+    </div>
+
+    <!-- S01 -->
+    <div class="brief-section" style="animation-delay:0.05s">
+      <div class="section-number"><span class="section-num">01</span><span class="section-cat">Interim Data · MINICOV Trial</span></div>
+      <h2 class="section-h2">MINICOV interim: OHSS rates 2.4% (urinary HMG, mini-IVF arm) vs 8.1% (conventional stimulation control). KEM Hospital co-investigator opportunity confirmed.</h2>
+      <div class="pills"><span class="pill pill-new">&#9650; Interim Data</span><span class="pill pill-watch">PCOS · OHSS Safety Signal</span></div>
+      <p class="section-body">MINICOV (Minimal stimulation IVF with urinary HMG in PCOS and poor responders, NCT05189673) has enrolled 186 patients to date across 4 sites (KEM Hospital Mumbai, Bangalore Fertility Centre, AIIMS Delhi, and a Pune private IVF unit). Interim analysis (pre-specified at 50% enrolment) shows: OHSS rate 2.4% in the mini-IVF/urinary HMG arm vs 8.1% in the conventional stimulation arm (p=0.04). Number of oocytes retrieved: 4.2 vs 9.1 (expected in a mini-IVF design). Ongoing pregnancy rate at interim: 28.4% vs 31.6% (difference not statistically significant). The KEM Hospital principal investigator, Dr. Firuza Parikh, has expressed interest in a co-authorship agreement for the final publication. This is a high-value scientific partnership opportunity — Dr. Parikh is one of the most cited IVF specialists in India.</p>
+      <div class="pull-quote">
+        <p class="pull-quote-text">"For my PCOS patients, OHSS is the nightmare I spend most of my pre-stimulation counselling preparing patients for. A protocol that cuts OHSS by three-quarters without meaningfully compromising pregnancy rates — that's what I've been looking for."</p>
+        <span class="pull-quote-cite">— Dr. Firuza Parikh, KEM Hospital Mumbai &middot; MINICOV Principal Investigator</span>
+      </div>
+      <div class="sources">
+        <span class="source-chip">MINICOV Trial — NCT05189673 · Interim Analysis</span>
+        <span class="source-chip">KEM Hospital Mumbai — PI Feedback</span>
+        <span class="source-chip">BSV Fertility MSL Field Reports Q2 2026</span>
+      </div>
+      <div class="fvq">
+        <div class="fvq-label">&#8594; Field Validation Question</div>
+        <p class="fvq-text">Are you currently offering minimal stimulation IVF protocols to your PCOS or cost-sensitive patients — and if so, what gonadotropin are you using, and what OHSS rates are you seeing in practice versus conventional stimulation?</p>
+      </div>
+    </div>
+
+    <div class="bottom-line">
+      <div class="bottom-line-header"><span class="bottom-line-label">&#9632; Bottom Line · 3 Actions</span></div>
+      <div class="bottom-line-items">
+        <div class="bottom-line-item"><span class="bl-num">01</span><span class="bl-text"><strong>Leverage MINICOV interim OHSS data (2.4% vs 8.1%) in MSL conversations</strong> with IVF specialists who manage PCOS. This is the most compelling early evidence differentiator in the mini-IVF segment.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">02</span><span class="bl-text"><strong>Initiate co-authorship discussion with Dr. Firuza Parikh (KEM Mumbai)</strong> for the final MINICOV publication — a prestigious Tier 1 co-author elevates BSV's scientific credibility in the IVF specialist community.</span></div>
+        <div class="bottom-line-item"><span class="bl-num">03</span><span class="bl-text"><strong>Submit MINICOV final results to India IVF Summit 2026 and ESHRE 2027</strong> — both congresses have high-visibility abstract tracks for PCOS and minimal stimulation protocols where BSV HMG can establish share of scientific voice.</span></div>
+      </div>
+    </div>
+
+    <div class="brief-footer">
+      <p class="footer-sources">Sources: MINICOV trial interim analysis (NCT05189673, 186 patients, 4 sites); KEM Hospital Mumbai PI correspondence; BSV fertility MSL field reports Q2 2026; India IVF Summit 2026 abstract submission timeline.</p>
+      <p class="footer-disc">This brief is prepared by Aurivian Medical Intelligence for BSV Group Medical Affairs internal use only. Not for external distribution.</p>
+    </div>
+  </div>
+
+  </div><!-- /view-brief -->
+
+  <!-- ══ VIEW: SIGNAL VELOCITY ════════════════ -->
+  <div id="view-velocity" class="view">
+  <div style="max-width:780px;margin:0 auto;padding:28px 32px 80px;">
+    <div class="vel-header">
+      <div class="vel-title">Signal Velocity</div>
+      <div class="vel-sub">Momentum of key intelligence signals across BSV Group's portfolio. Velocity = rate of new evidence, KOL mentions, and MSL field reports surfacing per week. Tracked from FOGSI 2025 to ESHRE 2026.</div>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top"><div class="vel-signal">rFSH vs HMG — Post-ESHRE 2026 Narrative Shift</div><span class="vel-badge vb-hot">&#8593;&#8593; Alert Peak</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">FOGSI 2025</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:21%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">21</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q1 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:34%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">34</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q2 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:52%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">52</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">ESHRE 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:79%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">79</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Post-ESHRE</span><div class="vel-bar-bg"><div class="vel-bar vbar-amber" style="width:96%"></div></div><span class="vel-pct" style="color:var(--amber);font-weight:700">96</span></div>
+      <p class="vel-note">Merck satellite reached 2,400+ IVF specialists at ESHRE 2026. Urinary FSH sentiment down 12 pts among specialists under 45. MSL Insight AI1 hit Prioritised threshold — 4 independent sources in 2 weeks.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top"><div class="vel-signal">Anti-D Compliance Gap — Tier 2/3 Risk Signal</div><span class="vel-badge vb-dn">&#8595; Alert · Declining Compliance</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">FOGSI 2025</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:16%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">16</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q1 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:31%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">31</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q2 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:58%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">58</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Sensitisation Cases</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:89%"></div></div><span class="vel-pct" style="color:var(--rose);font-weight:700">89</span></div>
+      <p class="vel-note">3 confirmed sensitisation cases Q2 2026. Stock interruptions 3-week avg at 4 sites. MO1 compliance at 64% vs 78% target. Risk score: Critical.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top"><div class="vel-signal">Meenakshi Sundaram Divergence (Tier 1 KOL)</div><span class="vel-badge vb-dn">&#8595; Diverging · −22 pts</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Jan 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:10%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">10</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">GSK Advisory</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:34%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">34</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Apr 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:62%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">62</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">May 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:78%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">78</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Now</span><div class="vel-bar-bg"><div class="vel-bar vbar-rose" style="width:91%"></div></div><span class="vel-pct" style="color:var(--rose);font-weight:700">91</span></div>
+      <p class="vel-note">Alignment score 74 → 52 in 90 days. Last BSV MSL contact: 14 weeks ago. FOGSI 2027 speaker role makes recovery urgent. No MSL contact in 14 weeks.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top"><div class="vel-signal">Minimal Stimulation IVF — MINICOV OHSS Data</div><span class="vel-badge vb-up">&#8593; Building</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">FOGSI 2025</span><div class="vel-bar-bg"><div class="vel-bar vbar-sage" style="width:14%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">14</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q1 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-sage" style="width:28%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">28</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q2 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-sage" style="width:47%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">47</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">ESHRE 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-sage" style="width:62%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">62</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">MINICOV Interim</span><div class="vel-bar-bg"><div class="vel-bar vbar-sage" style="width:78%"></div></div><span class="vel-pct" style="color:var(--sage);font-weight:700">78</span></div>
+      <p class="vel-note">MINICOV interim data: OHSS 2.4% vs 8.1% in PCOS patients. Cost-driven mini-IVF fastest-growing IVF segment in India. BSV HMG is the natural product — no targeting exists yet.</p>
+    </div>
+
+    <div class="vel-card">
+      <div class="vel-card-top"><div class="vel-signal">Oncofertility — GnRH Agonist Ovarian Protection Inquiries</div><span class="vel-badge vb-up">&#8593; Emerging</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q4 2025</span><div class="vel-bar-bg"><div class="vel-bar vbar-teal" style="width:8%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">8</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q1 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-teal" style="width:18%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">18</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Q2 2026</span><div class="vel-bar-bg"><div class="vel-bar vbar-teal" style="width:44%"></div></div><span class="vel-pct" style="color:var(--ink-lt)">44</span></div>
+      <div class="vel-bar-wrap"><span class="vel-label">Now</span><div class="vel-bar-bg"><div class="vel-bar vbar-teal" style="width:64%"></div></div><span class="vel-pct" style="color:var(--teal);font-weight:700">64</span></div>
+      <p class="vel-note">3 unsolicited oncofertility inquiries from gynecologic oncologists in Q2 2026. ESMO/ASCO guidelines support leuprolide for ovarian protection. MO4 currently Low. Zero BSV targeting exists in this segment.</p>
+    </div>
+  </div>
+  </div><!-- /view-velocity -->
+
+  <!-- ══ VIEW: NARRATIVE MAP ════════════════ -->
+  <div id="view-narrative" class="view">
+  <div style="max-width:980px;margin:0 auto;padding:28px 32px 80px;">
+    <div class="narr-header">
+      <div class="narr-title">Narrative Map</div>
+      <div class="narr-sub">Five narratives are converging in the BSV portfolio post-ESHRE 2026. The 14-week silence with Sundaram, the Anti-D sensitisation cases, and the rFSH satellite attack all require field response this week. The oncofertility and mini-IVF signals are the expansion opportunities that will define Q4 2026 positioning.</div>
+    </div>
+
+    <div class="narr-timeline" style="overflow-x:auto;padding:8px 0 12px;">
+      <svg viewBox="0 0 800 80" width="100%" style="min-width:480px;">
+        <line x1="40" y1="40" x2="760" y2="40" stroke="#D4CEC4" stroke-width="1"/>
+        <circle cx="40"  cy="40" r="4" fill="#0D6E6E"/>
+        <circle cx="200" cy="40" r="4" fill="#0D6E6E"/>
+        <circle cx="380" cy="40" r="4" fill="#0D6E6E"/>
+        <circle cx="560" cy="40" r="4" fill="#B5540A"/>
+        <circle cx="760" cy="40" r="5" fill="#0D6E6E" stroke="#1A1612" stroke-width="1.5"/>
+        <text x="40"  y="62" font-family="DM Mono,monospace" font-size="9" fill="#7A6E65" text-anchor="middle">FOGSI 2025</text>
+        <text x="200" y="62" font-family="DM Mono,monospace" font-size="9" fill="#7A6E65" text-anchor="middle">Q1 2026</text>
+        <text x="380" y="62" font-family="DM Mono,monospace" font-size="9" fill="#7A6E65" text-anchor="middle">FOGSI 2026</text>
+        <text x="560" y="62" font-family="DM Mono,monospace" font-size="9" fill="#B5540A" text-anchor="middle">ESHRE 2026</text>
+        <text x="760" y="62" font-family="DM Mono,monospace" font-size="9" fill="#0D6E6E" text-anchor="middle" font-weight="600">Now</text>
+      </svg>
+    </div>
+
+    <div class="narr-cards">
+      <div class="narr-card">
+        <div class="narr-card-header"><span class="narr-card-name">rFSH Batch Consistency Attack</span><span class="narr-badge nb-risk">Threat</span></div>
+        <p class="narr-card-body">Merck's ESHRE 2026 satellite framed batch consistency as the clinical differentiator for rFSH. Sentiment toward urinary preparations is declining among younger IVF specialists. IVFCARE India RCT and Cochrane meta-analysis directly rebut it. 72-hour response window is open now.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">Merck satellite + LP5 activated + AI1 Prioritised</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header"><span class="narr-card-name">Anti-D Compliance Failure</span><span class="narr-badge nb-risk">Critical Risk</span></div>
+        <p class="narr-card-body">Three confirmed sensitisation cases in Q2 2026. Stock interruptions are the structural root cause. Institutional bulk supply is the fix — individual prescribing will not close the gap at Tier 2/3 scale. Dr. Chhabra is the fastest path to the Maharashtra network.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">RHOPRO registry + 3 sensitisation cases Q2 2026</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header"><span class="narr-card-name">Sundaram Divergence</span><span class="narr-badge nb-risk">Threat</span></div>
+        <p class="narr-card-body">Tier 1 FOGSI speaker at 74→52 alignment after GSK advisory board. 14-week silence means no counter-narrative has been offered. FOGSI 2027 planning begins Q3 — recovery required before then.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">GSK advisory board Mar 2026 + 14-week gap</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header"><span class="narr-card-name">Luprodex 3-Month Protocol</span><span class="narr-badge nb-build">Building</span></div>
+        <p class="narr-card-body">ENDOCARE non-inferiority confirmed. Early-adopter FOGSI KOLs switching to 3-month protocol for convenience. The broader prescriber network has not seen the data. Dissemination is the only action required — the evidence already exists.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">ENDOCARE FOGSI 2026 abstract + 3 early adopters</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header"><span class="narr-card-name">Oncofertility Segment Opening</span><span class="narr-badge nb-build">Emerging</span></div>
+        <p class="narr-card-body">Three unsolicited gynecologic oncologist inquiries about leuprolide ovarian protection in Q2 2026. ESMO/ASCO guidelines already support the indication. The segment is reaching out to BSV without targeting. Materials creation is the bottleneck.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">3 unsolicited inquiries + MO4 Low + ESMO/ASCO guidelines</div>
+      </div>
+      <div class="narr-card">
+        <div class="narr-card-header"><span class="narr-card-name">Mini-IVF / MINICOV</span><span class="narr-badge nb-acc">Accelerating</span></div>
+        <p class="narr-card-body">MINICOV interim: OHSS 2.4% vs 8.1% is a compelling safety story for PCOS patients. Mini-IVF is the fastest-growing IVF segment in India. BSV HMG is the natural product by cost and evidence — but no positioning exists yet in this space.</p>
+        <div class="narr-card-driver">Primary driver</div>
+        <div class="narr-card-driver-val">MINICOV interim OHSS data + PCOS prevalence trend</div>
+      </div>
+    </div>
+  </div>
+  </div><!-- /view-narrative -->
+
+</main>
+</div>
+
+<!-- AUDIO PLAYER BAR — must be BEFORE <script> -->
+<div id="audio-bar">
+  <button class="audio-play-btn" onclick="toggleAudio()" id="play-btn">
+    <span class="audio-play-icon" id="play-icon">&#9654;</span>
+  </button>
+  <div class="audio-meta">
+    <div class="audio-title">Pulse Brief · July 11, 2026</div>
+    <div class="audio-subtitle">BSV Group Medical Intelligence</div>
+  </div>
+  <div class="audio-progress-wrap">
+    <div class="audio-track" onclick="scrubAudio(event)" id="audio-track">
+      <div class="audio-fill" id="audio-fill"></div>
+    </div>
+    <span class="audio-time" id="audio-time">0:00</span>
+  </div>
+  <button class="audio-close" onclick="closeAudio()" title="Close">&#215;</button>
+</div>
+<audio id="brief-audio" src="pulse_bsv_brief_audio.mp3" preload="metadata"></audio>
+
+<script>
+function toggleSidebar() {
+  const shell = document.getElementById('shell');
+  const btn   = document.getElementById('sidebar-toggle');
+  const collapsed = shell.classList.toggle('collapsed');
+  btn.innerHTML = collapsed ? '&#8250;' : '&#8249;';
+}
+
+function switchBrief(card, briefId) {
+  document.querySelectorAll('.brief-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  document.querySelectorAll('.brief-content').forEach(b => b.classList.remove('active'));
+  const target = document.getElementById('brief-' + briefId);
+  if (target) target.classList.add('active');
+  showView('brief', document.getElementById('nav-brief'));
+  document.getElementById('main').scrollTop = 0;
+}
+
+function showView(view, navEl) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  document.getElementById('main').scrollTop = 0;
+}
+
+function openAudio() {
+  const bar = document.getElementById('audio-bar');
+  bar.classList.add('open');
+  const btn = document.getElementById('listen-btn');
+  if (btn) btn.classList.add('playing');
+  const audio = document.getElementById('brief-audio');
+  if (audio) {
+    audio.play().then(() => {
+      document.getElementById('play-icon').innerHTML = '&#9646;&#9646;';
+    }).catch(() => {});
+  }
+}
+
+function toggleAudio() {
+  const audio = document.getElementById('brief-audio');
+  const icon  = document.getElementById('play-icon');
+  if (!audio) return;
+  if (audio.paused) {
+    audio.play().then(() => { icon.innerHTML = '&#9646;&#9646;'; }).catch(() => {});
+  } else {
+    audio.pause();
+    icon.innerHTML = '&#9654;';
+  }
+}
+
+function closeAudio() {
+  const audio = document.getElementById('brief-audio');
+  if (audio) { audio.pause(); audio.currentTime = 0; }
+  document.getElementById('audio-bar').classList.remove('open');
+  const icon = document.getElementById('play-icon');
+  if (icon) icon.innerHTML = '&#9654;';
+  const btn = document.getElementById('listen-btn');
+  if (btn) btn.classList.remove('playing');
+}
+
+function scrubAudio(e) {
+  const audio = document.getElementById('brief-audio');
+  const track = document.getElementById('audio-track');
+  if (!audio || !track || !audio.duration) return;
+  const rect = track.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = pct * audio.duration;
+}
+
+(function() {
+  const audio = document.getElementById('brief-audio');
+  if (!audio) return;
+  audio.addEventListener('timeupdate', function() {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    const fill = document.getElementById('audio-fill');
+    if (fill) fill.style.width = pct + '%';
+    const m = Math.floor(audio.currentTime / 60);
+    const s = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+    const d = Math.floor(audio.duration / 60);
+    const ds = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+    const timeEl = document.getElementById('audio-time');
+    if (timeEl) timeEl.textContent = m + ':' + s + ' / ' + d + ':' + ds;
+  });
+  audio.addEventListener('ended', function() {
+    document.getElementById('play-icon').innerHTML = '&#9654;';
+  });
+})();
+</script>
+</body>
+</html>

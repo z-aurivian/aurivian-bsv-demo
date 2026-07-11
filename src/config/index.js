@@ -2,7 +2,7 @@
 // One filled-out Demo Brief = one customer's values across these modules.
 // See DEMO_BRIEF_TEMPLATE.md for the schema.
 
-export { CLIENT, CAPTURE_APP_URL } from './customer';
+export { CLIENT, CAPTURE_APP_URL, PULSE_BRIEF_URL } from './customer';
 export { PRODUCT_OPTIONS, PLATFORM_LENS } from './products';
 export { CONGRESS_OPTIONS } from './congresses';
 export { THERAPEUTIC_AREA } from './therapeutic-area';
