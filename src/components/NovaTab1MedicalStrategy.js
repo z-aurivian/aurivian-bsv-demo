@@ -13,10 +13,10 @@ import {
 // ─── Mock data (structural — override per demo via config when needed) ────
 
 const TACTIC_POA = [
-  { id: 'T1', name: 'Evidence Generation',      Icon: Microscope, budget: '$1.8M', pct: 28, moRefs: ['MO1','MO3','MO4'], signalCount: 3, signalStatus: 'Active',  deliverables: ['RWE sub-analysis protocol', 'Registry data submission', 'Pediatric outcomes abstract'], novaSummary: 'Signal volume is high. Three field signals this cycle point to evidence gaps in rare subpopulations as the #1 barrier to MO1 progress.' },
-  { id: 'T2', name: 'Medical Education',         Icon: BookOpen,   budget: '$1.4M', pct: 22, moRefs: ['MO1','MO2'],       signalCount: 2, signalStatus: 'Monitor', deliverables: ['Switch education module', 'Community HCP webinar series', 'Switch FAQ co-creation'], novaSummary: 'Two signals: HCP-facing switch materials read as academic. Community-language adaptation is overdue.' },
-  { id: 'T3', name: 'Field Medical Engagement',  Icon: Users,      budget: '$1.6M', pct: 25, moRefs: ['MO1','MO2','MO3'], signalCount: 5, signalStatus: 'Alert',   deliverables: ['MSL interaction quality programme', 'KOL engagement plan refresh', 'Congress debrief protocol'], novaSummary: 'Highest signal volume of any tactic. Five signals flagged — MO2 switching inertia and MO3 guideline positioning are both active.' },
-  { id: 'T4', name: 'Scientific Communications', Icon: FileText,   budget: '$0.6M', pct:  9, moRefs: ['MO2','MO3','MO4'], signalCount: 1, signalStatus: 'Active',  deliverables: ['Peer-reviewed manuscript pipeline', 'Congress poster submissions', 'Scientific platform refresh'], novaSummary: 'One signal: NMOSD sequencing data gap. RWE sub-analysis scope would directly feed the manuscript pipeline.' },
+  { id: 'T1', name: 'Evidence Generation',      Icon: Microscope, budget: '$1.8M', pct: 28, moRefs: ['MO1','MO3','MO4'], signalCount: 3, signalStatus: 'Active',  deliverables: ['Anti-D compliance protocol card', 'HMG vs rFSH clinical equivalence one-pager', 'Batch QC summary card'], novaSummary: 'Signal volume is high. Field signals this cycle point to Anti-D cost and stock gaps as the #1 barrier to MO1 progress.' },
+  { id: 'T2', name: 'Medical Education',         Icon: BookOpen,   budget: '$1.4M', pct: 22, moRefs: ['MO1','MO2'],       signalCount: 2, signalStatus: 'Monitor', deliverables: ['Luprodex 3-month protocol algorithm', 'Add-back therapy MSL briefing', 'Oncofertility MSL briefing kit'], novaSummary: 'Two signals: KOLs are shifting to shorter GnRH agonist cycles faster than MSL materials are keeping pace. Protocol algorithm development is overdue.' },
+  { id: 'T3', name: 'Field Medical Engagement',  Icon: Users,      budget: '$1.6M', pct: 25, moRefs: ['MO1','MO2','MO3'], signalCount: 5, signalStatus: 'Alert',   deliverables: ['MSL interaction quality programme', 'KOL engagement plan refresh', 'Congress debrief protocol'], novaSummary: 'Highest signal volume of any tactic. Five signals flagged — MO2 GnRH agonist protocol shift and MO3 rFSH competitive pressure post-ESHRE are both active.' },
+  { id: 'T4', name: 'Scientific Communications', Icon: FileText,   budget: '$0.6M', pct:  9, moRefs: ['MO2','MO3','MO4'], signalCount: 1, signalStatus: 'Active',  deliverables: ['Peer-reviewed manuscript pipeline', 'Congress poster submissions', 'Scientific platform refresh'], novaSummary: 'One signal: HMG vs rFSH evidence gap post-ESHRE 2026. Clinical equivalence data would directly feed the manuscript pipeline.' },
   { id: 'T5', name: 'HEOR',                      Icon: BarChart2,  budget: '$0.5M', pct:  8, moRefs: ['MO3','MO4'],       signalCount: 0, signalStatus: 'Monitor', deliverables: ['Cost-effectiveness model update', 'Burden-of-disease publication'], novaSummary: 'No new signals this cycle. Budget allocation reviewed; no reallocation proposed.' },
   { id: 'T6', name: 'Patient Advocacy',          Icon: Heart,      budget: '$0.5M', pct:  8, moRefs: ['MO1','MO2'],       signalCount: 1, signalStatus: 'Active',  deliverables: ['Patient organisation engagement plan', 'Disease awareness co-creation'], novaSummary: 'One signal: community infusion centres requesting patient-facing materials. Aligns with MO2 switch education deliverable.' },
 ];
@@ -25,50 +25,48 @@ const INSIGHT_LOOPS = [
   {
     id: 'IL1', tactic: 'Evidence Generation', moRef: 'MO1',
     signals: [
-      { source: 'MSL interaction', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling. "We won\'t enrol without it."' },
-      { source: 'Congress debrief', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-05-28', text: 'AAN satellite symposium: 4 of 6 panellists cited NMOSD long-term RWE gap as the main sequencing barrier.' },
+      { source: 'MSL interaction', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-06-14', text: 'My patients know they need it but they ask if they can wait. The answer is no, but I can\'t pay for it myself.' },
+      { source: 'MSL interaction', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-06-07', text: 'We ran out of Anti-D stock for 3 weeks last quarter. Those patients are now sensitised.' },
     ],
-    novaSynthesis: 'Pattern across 2 source types: pediatric and NMOSD long-term evidence are the primary barriers to MO1 progress. Confidence: 82%.',
-    insight: { id: 'AI2', confidence: 0.82, status: 'Validated', title: 'RWE gap — long-term NMOSD outcomes', summary: 'NMOSD specialists sequencing C5 vs IL-6 vs CD19 without head-to-head long-term data. Retention and relapse-free survival data requested.' },
-    action: { title: 'Scope long-term NMOSD relapse-free RWE sub-analysis with HEOR', owner: 'HEOR', dueBy: '2026-Q4', moRef: 'MO1' },
-    loopCondition: 'RWE sub-analysis protocol approved by HEOR',
-    loopMet: false,
+    novaSynthesis: 'MSL field reports across three regions consistently flag out-of-pocket cost and irregular hospital stock as the primary barriers to Anti-D compliance in Tier 2/3 settings. Confidence: 88%.',
+    insight: { id: 'AI2', confidence: 0.88, status: 'Validated', title: 'Anti-D compliance crisis in Tier 2/3 — cost and stock gaps identified', summary: 'MSL field reports across three regions consistently flag out-of-pocket cost (₹800–1,200 per injection) and irregular hospital stock as the primary barriers to Anti-D compliance in Tier 2/3 settings. Patients who self-pay are choosing to defer or forgo prophylaxis. A structured patient support or institutional bulk-supply programme is urgently needed.' },
+    action: { title: 'Deploy Anti-D compliance protocol card to all MSLs (28-week + post-delivery)', owner: 'Field Medical', dueBy: '2026-Q3', moRef: 'MO1' },
+    loopCondition: 'Anti-D compliance protocol card approved and deployed to all MSLs',
+    loopMet: true,
   },
   {
     id: 'IL2', tactic: 'Field Medical Engagement', moRef: 'MO2',
     signals: [
-      { source: 'MSL interaction', msl: 'A. Krishnaswamy', territory: 'South (Bangalore)', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it, even though the dosing interval would be easier."' },
-      { source: 'Med Info query', msl: 'S. Pillai', territory: 'East (Kolkata)', date: '2026-06-01', text: 'Infusion centre nurse asked for a switch protocol sheet she can hand to scheduling staff.' },
-      { source: 'Ad board', msl: 'P. Shenoy', territory: 'South (Chennai)', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
+      { source: 'Advisory board', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-07-01', text: 'I use Luprodex 3-month depot now as default for stage II endo. But I need something to hand nurses who ask about the protocol.' },
+      { source: 'MSL interaction', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-06-22', text: 'Six months of bone loss is hard to justify anymore. Show me a 3-month add-back study and I\'ll formalise the protocol.' },
     ],
-    novaSynthesis: 'Switching inertia is framing-based, not knowledge-based. Community language adaptation is the critical lever. Confidence: 87%.',
-    insight: { id: 'AI1', confidence: 0.87, status: 'Prioritised', title: 'Infusion-burden concern persists', summary: 'Community haematologists cite biweekly infusion burden as a decision point, but switching inertia remains high even where switching is appropriate.' },
-    action: { title: 'Develop community-facing switch-stability narrative', owner: 'Field Medical', dueBy: '2026-Q3', moRef: 'MO2' },
-    loopCondition: 'Switch-stability narrative reviewed, approved and deployed to MSL tablets',
-    loopMet: true,
+    novaSynthesis: 'Top-tier KOLs including Dr. Rishma Dhillon Pai and Dr. Narendra Malhotra are independently shifting toward shorter GnRH agonist cycles with add-back therapy — BSV lacks a branded 3-month protocol algorithm MSLs can distribute. Confidence: 84%.',
+    insight: { id: 'AI3', confidence: 0.84, status: 'Validated', title: 'Luprodex Depot 3-month protocol gaining traction — data needed to support shift', summary: 'Three top-tier KOLs including Dr. Rishma Dhillon Pai and Dr. Narendra Malhotra have independently shifted their endometriosis practice toward shorter GnRH agonist cycles with add-back therapy, citing patient quality-of-life and bone density concerns. BSV lacks a BSV-branded 3-month protocol algorithm that MSLs can distribute to support this shift.' },
+    action: { title: 'Produce Luprodex 3-month protocol algorithm with add-back therapy guidance', owner: 'Medical Comms', dueBy: '2026-Q3', moRef: 'MO2' },
+    loopCondition: 'Luprodex 3-month protocol algorithm approved and distributed to MSLs',
+    loopMet: false,
   },
   {
     id: 'IL3', tactic: 'Medical Education', moRef: 'MO2',
     signals: [
-      { source: 'MSL interaction', msl: 'P. Shenoy', territory: 'South (Chennai)', date: '2026-06-08', text: 'GP registrar asked for patient FAQs for switch discussion. "Something the patient can take home."' },
-      { source: 'MSL interaction', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-05-30', text: '"The switch FAQ on the portal is written for consultants, not patients."' },
-      { source: 'MSL interaction', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-05-22', text: 'Three infusion centres requested co-creation of patient-friendly switch materials. Offering to join review panel.' },
+      { source: 'MSL interaction', msl: 'P. Shenoy', territory: 'South (Chennai)', date: '2026-04-02', text: 'The data from the GSK advisory was compelling on the purity profile. I\'m giving the new analogue a 6-month trial in my practice.' },
     ],
-    novaSynthesis: 'Three independent signals from different territories, same gap: patient-facing switch language is absent. Co-creation opportunity with community HCPs. Confidence: 91%.',
-    insight: { id: 'AI4', confidence: 0.91, status: 'Prioritised', title: 'Switch-stability concerns from community centres', summary: 'Community infusion centres want a patient-facing switch-stability narrative; current MSL materials read as academic.' },
-    action: { title: 'Develop patient-facing switch FAQ (co-created with community HCPs)', owner: 'Medical Comms', dueBy: '2026-Q3', moRef: 'MO2' },
-    loopCondition: 'Switch FAQ approved, deployed to community centres and MSL tablets',
-    loopMet: false,
+    novaSynthesis: 'Dr. S. Meenakshi Sundaram (Apollo Chennai) attended a GSK-sponsored advisory board and has since begun recommending recombinant GnRH analogues over Goserelin and Luprodex — alignment score declined from 74 to 52. This requires priority MSL intervention before she formalises the practice change. Confidence: 79%.',
+    insight: { id: 'AI5', confidence: 0.79, status: 'Prioritised', title: 'Dr. Meenakshi Sundaram shifting toward recombinant GnRH analogues', summary: 'DIVERGENCE ALERT: Dr. S. Meenakshi Sundaram (Apollo Chennai) attended a GSK-sponsored advisory board in March 2026 and has since begun recommending newer recombinant GnRH analogues over BSV\'s Goserelin and Luprodex. Alignment score has declined from 74 to 52. Requires priority MSL intervention before she formalises her practice change.' },
+    action: { title: 'Schedule priority MSL visit with Dr. Meenakshi Sundaram (Chennai)', owner: 'Field Medical', dueBy: '2026-Q3', moRef: 'MO2' },
+    loopCondition: 'Priority MSL visit completed and outcome documented',
+    loopMet: true,
   },
   {
     id: 'IL4', tactic: 'Scientific Communications', moRef: 'MO3',
     signals: [
-      { source: 'Congress debrief', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-06-05', text: 'gMG guideline steering member: "Bring us the refractory subgroup data and we have something to work with. The current language is too hedged."' },
+      { source: 'Congress debrief', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-07-05', text: 'The Gonal-f satellite had strong data. I need to see something from BSV before I shift my PCOS protocol.' },
+      { source: 'MSL interaction', msl: 'A. Krishnaswamy', territory: 'South (Bangalore)', date: '2026-07-02', text: 'If you can show me Cochrane-level evidence, I\'ll stay with HMG. Otherwise I have to follow ESHRE consensus.' },
     ],
-    novaSynthesis: 'Single high-credibility signal from a guideline steering member. Low volume but high strategic value — this is a gating signal for MO3 progress. Confidence: 71%.',
-    insight: { id: 'AI3', confidence: 0.71, status: 'Triaged', title: 'gMG guideline positioning opportunity', summary: 'Current gMG guidelines position C5 inhibition neutrally. Steering-committee KOLs open to strengthening with additional refractory-subgroup evidence.' },
-    action: { title: 'Engage gMG guideline steering KOLs for refractory-subgroup dossier', owner: 'Medical Affairs', dueBy: 'TBD', moRef: 'MO3' },
-    loopCondition: 'Refractory-subgroup dossier submitted to guideline steering committee',
+    novaSynthesis: 'Multiple KOLs returning from ESHRE 2026 have referenced recombinant FSH superiority messaging from Merck and Organon — without a fast clinical-equivalence rebuttal, prescribing inertia toward rFSH will solidify in Tier 1 IVF centres. Confidence: 91%.',
+    insight: { id: 'AI1', confidence: 0.91, status: 'Prioritised', title: 'rFSH narrative winning at ESHRE — urinary FSH rebuttal needed urgently', summary: 'Multiple KOLs returning from ESHRE 2026 (London) have referenced recombinant FSH superiority messaging from Merck and Organon symposia. Three IVF centre directors have explicitly asked BSV MSLs for clinical equivalence data. Without a fast rebuttal, prescribing inertia toward rFSH will solidify in Tier 1 IVF centres.' },
+    action: { title: 'Develop HMG vs rFSH clinical equivalence one-pager (Cochrane + IVFCARE India)', owner: 'Medical Comms', dueBy: '2026-Q3', moRef: 'MO3' },
+    loopCondition: 'HMG vs rFSH clinical equivalence one-pager approved and distributed',
     loopMet: false,
   },
 ];
@@ -78,37 +76,36 @@ const MAO_METRICS = [
   { label: 'Actionable insights generated',       value: '7',   sub: '+3 vs prior cycle',   alert: false },
   { label: 'Actions initiated',                   value: '5',   sub: '71% of insights',      alert: false },
   { label: 'Tactical POA areas reshaped by AI',   value: '3',   sub: 'of 6 tactics',         alert: false },
-  { label: 'MOs with critical coverage gaps',     value: '1',   sub: 'MO4 · Gap',            alert: true  },
+  { label: 'MOs with critical coverage gaps',     value: '1',   sub: 'MO5 · Gap',            alert: true  },
 ];
 
 const MAO_TABLE = [
-  { mo: 'MO1', name: 'Real-world evidence',    signalsIn: 62, breakdown: 'MSL 48% · Congress 31% · Lit 21%', insightIds: 'AI2, AI5', actionsCount: 2, actionsInitiated: 1, coverage: 'Low',       aiImpact: 'Partial',   impactDesc: 'RWE sub-analysis scoped; registry protocol in review.' },
-  { mo: 'MO2', name: 'HCP switching education',signalsIn: 89, breakdown: 'MSL 62% · Med Info 21% · Ad board 17%', insightIds: 'AI1, AI4', actionsCount: 3, actionsInitiated: 3, coverage: 'Sufficient', aiImpact: 'Reshaped',  impactDesc: 'Switch-stability narrative reframed to community language following AI synthesis. Approved and deployed.' },
-  { mo: 'MO3', name: 'Guideline alignment',    signalsIn: 54, breakdown: 'Congress 52% · KOL 28% · Lit 20%',  insightIds: 'AI3',       actionsCount: 1, actionsInitiated: 0, coverage: 'Low',       aiImpact: 'Partial',   impactDesc: 'KOL engagement plan updated to prioritise guideline steering members. Dossier scoping underway.' },
-  { mo: 'MO4', name: 'Scientific exchange',    signalsIn: 42, breakdown: 'Congress 60% · KOL 40%',            insightIds: 'AI7',       actionsCount: 1, actionsInitiated: 1, coverage: 'Gap',       aiImpact: 'Not yet',   impactDesc: 'No plan change documented. Insight generated but not yet accepted by Medical Affairs leadership.' },
+  { mo: 'MO1', name: 'Anti-D HCP reach',       signalsIn: 62, breakdown: 'MSL 48% · Congress 31% · Lit 21%', insightIds: 'AI2',       actionsCount: 2, actionsInitiated: 1, coverage: 'Sufficient', aiImpact: 'Reshaped',  impactDesc: 'Compliance protocol card deployed; institutional bulk-supply programme proposed to Market Access.' },
+  { mo: 'MO2', name: 'GnRH agonist confidence', signalsIn: 89, breakdown: 'MSL 62% · Med Info 21% · Ad board 17%', insightIds: 'AI3, AI5', actionsCount: 3, actionsInitiated: 2, coverage: 'Low',       aiImpact: 'Partial',   impactDesc: 'Luprodex 3-month protocol algorithm in development; priority MSL visit with Dr. Meenakshi Sundaram accepted.' },
+  { mo: 'MO3', name: 'Fertility portfolio depth', signalsIn: 54, breakdown: 'Congress 52% · KOL 28% · Lit 20%',  insightIds: 'AI1, AI6, AI7', actionsCount: 3, actionsInitiated: 1, coverage: 'Sufficient', aiImpact: 'Partial',   impactDesc: 'HMG vs rFSH clinical equivalence one-pager scoped following ESHRE 2026 competitive pressure; batch QC card proposed.' },
+  { mo: 'MO4', name: 'Oncology hormonal therapy', signalsIn: 42, breakdown: 'Congress 60% · KOL 40%',            insightIds: 'AI4',       actionsCount: 1, actionsInitiated: 0, coverage: 'Low',       aiImpact: 'Not yet',   impactDesc: 'Oncofertility MSL briefing kit proposed. Insight generated but not yet accepted by Medical Affairs leadership.' },
 ];
 
 const AUDIT_TRAILS = {
   MO1: {
     rawSignals: [
-      { source: 'MSL interaction', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-06-04', text: 'Community haematologists asking for pediatric 3-year retention data before enrolling.' },
-      { source: 'Congress debrief', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-05-28', text: 'AAN 2026: 4 of 6 panellists cited NMOSD long-term RWE gap as sequencing barrier.' },
+      { source: 'MSL interaction', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-06-14', text: 'Patients know they need Anti-D but ask if they can wait — they cannot afford to self-pay.' },
+      { source: 'MSL interaction', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-06-07', text: 'District hospital ran out of Anti-D stock for 3 weeks last quarter; those patients are now sensitised.' },
     ],
-    synthesis: { text: 'Pattern across MSL and congress sources: long-term evidence gaps in rare subpopulations are the primary barrier to MO1 progress.', confidence: 0.82, checks: ['MSL field reports', 'AAN congress abstracts', 'Prior-cycle literature scan'] },
-    insight: { id: 'AI2', confidence: 0.82, status: 'Validated', title: 'RWE gap — long-term NMOSD outcomes', summary: 'NMOSD specialists making sequencing decisions without head-to-head long-term data.' },
-    action: { title: 'Scope long-term NMOSD relapse-free RWE sub-analysis with HEOR', owner: 'HEOR', date: '2026-Q4', mos: ['MO1'] },
-    planChange: { when: 'June 2026', effect: 'HEOR budget increased by 8% to support sub-analysis scope. New deliverable added: relapse-free survival registry analysis.', condition: 'Sub-analysis protocol approved' },
+    synthesis: { text: 'Pattern across MSL field reports: out-of-pocket cost and irregular hospital stock are the primary barriers to Anti-D compliance in Tier 2/3 settings.', confidence: 0.88, checks: ['MSL field reports', 'Institutional stock audits', 'Ad board transcript'] },
+    insight: { id: 'AI2', confidence: 0.88, status: 'Validated', title: 'Anti-D compliance crisis in Tier 2/3 — cost and stock gaps identified', summary: 'MSL field reports across three regions consistently flag out-of-pocket cost and irregular hospital stock as the primary barriers to Anti-D compliance in Tier 2/3 settings.' },
+    action: { title: 'Deploy Anti-D compliance protocol card to all MSLs (28-week + post-delivery)', owner: 'Field Medical', date: '2026-Q3', mos: ['MO1'] },
+    planChange: { when: 'June 2026', effect: 'Anti-D compliance protocol card (28-week + post-delivery) accepted by Field Medical and fast-tracked for MSL rollout across Tier 2/3 hospitals.', condition: 'Protocol card deployed to all MSLs' },
   },
   MO2: {
     rawSignals: [
-      { source: 'MSL interaction', msl: 'A. Krishnaswamy', territory: 'South (Bangalore)', date: '2026-06-10', text: '"Patients who are stable are stable — I don\'t want to mess with it."' },
-      { source: 'Med Info query', msl: 'S. Pillai', territory: 'East (Kolkata)', date: '2026-06-01', text: 'Infusion centre nurse asked for switch protocol she can hand to scheduling.' },
-      { source: 'Ad board', msl: 'P. Shenoy', territory: 'South (Chennai)', date: '2026-05-20', text: '"Switching data convincing on paper but we need a cleaner community-facing algorithm."' },
+      { source: 'Advisory board', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-07-01', text: 'KOL using Luprodex 3-month depot as default for stage II endo, but needs a distributable protocol for nursing staff.' },
+      { source: 'MSL interaction', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-06-22', text: 'Six months of bone loss is hard to justify — KOL wants a 3-month add-back study to formalise the protocol.' },
     ],
-    synthesis: { text: 'Switching inertia is framing-based, not knowledge-based. Community language adaptation is the critical lever.', confidence: 0.87, checks: ['MSL interaction corpus', 'Med Info query log', 'Ad board transcript'] },
-    insight: { id: 'AI1', confidence: 0.87, status: 'Prioritised', title: 'Infusion-burden concern persists', summary: 'Community haematologists cite biweekly infusion burden as a decision point but switching inertia remains high.' },
-    action: { title: 'Develop community-facing switch-stability narrative', owner: 'Field Medical', date: '2026-Q3', mos: ['MO2'] },
-    planChange: { when: 'May 2026', effect: 'Switch-education module reframed from academic to community-HCP language. New deliverable: co-created patient FAQ. Budget reallocated from Scientific Comms (−$40K).', condition: 'Switch FAQ deployed to community centres' },
+    synthesis: { text: 'Top-tier KOLs are independently shifting toward shorter GnRH agonist cycles with add-back therapy — BSV lacks a branded 3-month protocol algorithm MSLs can distribute.', confidence: 0.84, checks: ['Advisory board minutes', 'MSL field reports', 'KOL practice pattern tracking'] },
+    insight: { id: 'AI3', confidence: 0.84, status: 'Validated', title: 'Luprodex Depot 3-month protocol gaining traction — data needed to support shift', summary: 'Three top-tier KOLs have independently shifted their endometriosis practice toward shorter GnRH agonist cycles with add-back therapy, citing quality-of-life and bone density concerns.' },
+    action: { title: 'Produce Luprodex 3-month protocol algorithm with add-back therapy guidance', owner: 'Medical Comms', date: '2026-Q3', mos: ['MO2'] },
+    planChange: { when: 'July 2026', effect: 'Luprodex 3-month protocol algorithm with add-back therapy guidance fast-tracked to Medical Comms for MSL distribution.', condition: 'Protocol algorithm approved and distributed' },
   },
 };
 
@@ -185,10 +182,12 @@ function NovaStrategicBrief() {
       </div>
       <p className="text-sm text-auri-text leading-relaxed">
         The strategy-to-action score stands at <strong>72/100</strong>, up 8 points from last cycle.
-        Switching inertia (MO2) remains the highest-signal theme — three independent MSL territories
-        this cycle confirmed that the barrier is framing, not clinical knowledge. The RWE gap for
-        long-term NMOSD outcomes (MO1) is emerging as the #2 priority. One critical coverage gap
-        persists: MO4 (Scientific exchange) has received no new field signals this cycle.
+        The rFSH competitive narrative from ESHRE 2026 (MO3) remains the highest-signal theme —
+        multiple KOLs have cited Merck and Organon superiority messaging and are asking BSV for a fast
+        clinical-equivalence rebuttal. Anti-D compliance gaps in Tier 2/3 hospitals (MO1) driven by
+        out-of-pocket cost and stock shortages are the #2 priority. One critical coverage gap persists:
+        MO5 (ART outcomes evidence) needs a dedicated real-world evidence push to counter the rFSH
+        narrative directly.
       </p>
     </div>
   );
@@ -714,7 +713,7 @@ function ROICalculator() {
         </div>
         <p className="text-xs text-auri-text">
           Based on signal ROI analysis, Nova recommends reallocating <strong>$120K</strong> from Scientific Communications to Field Medical Engagement and <strong>$60K</strong> to Medical Education.
-          Combined reallocation of <strong>$180K</strong> is projected to increase MO2 coverage from <strong>Sufficient → Confirmed</strong> within 2 cycles.
+          Combined reallocation of <strong>$180K</strong> is projected to increase MO2 coverage from <strong>Low → Sufficient</strong> within 2 cycles.
           Pending Medical Affairs leadership approval.
         </p>
       </div>

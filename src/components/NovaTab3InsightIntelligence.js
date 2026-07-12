@@ -25,75 +25,68 @@ const KIQ_PERIOD_DATA = {
   LP1: {
     status: 'new',
     thisPeriod: {
-      summary: 'Three independent MSL reports this cycle confirm community haematologists lack awareness of the long-term Ultomiris retention data. The gap is most pronounced in West (Mumbai/Pune) and South (Chennai). MSLs who probed directly found HCPs defaulting to switching FAQs that cite only 2-year data.',
-      novaSynthesis: 'The intelligence picture shifted this period: awareness of the data exists among academic centres but has not transferred to community practice. The missing link is a community-appropriate evidence summary — not more data generation.',
-      keyQuote: { text: 'I know the 3-year data exists somewhere but I\'ve never seen a clean one-pager I could use in clinic.', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-06-04' },
-      actionPill: { insight: 'AI2', taken: true, label: 'RWE sub-analysis scoped' },
+      summary: 'MSL field reports across three regions confirm out-of-pocket cost (₹800–1,200 per injection) and irregular hospital stock as the primary barriers to Anti-D compliance in Tier 2/3 settings this period. Patients who self-pay are choosing to defer or forgo prophylaxis.',
+      novaSynthesis: 'This is a structural access problem, not an awareness problem — obstetricians know Anti-D is needed but patients cannot always pay, and stock gaps compound the barrier. An institutional bulk-supply model, not more education, is the lever.',
+      keyQuote: { text: 'My patients know they need it but they ask if they can wait. The answer is no, but I can\'t pay for it myself.', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-06-14' },
+      actionPill: { insight: 'AI2', taken: true, label: 'Compliance protocol card deployed' },
     },
     cumulative: {
-      summary: 'Across 3 measurement periods, community awareness of long-term Ultomiris RWE has grown from 12% to 31% of surveyed HCPs — steady progress, but below the 60% target. Academic centres are at 78%.',
-      runningInsight: 'The question has shifted from "does the data exist?" to "how do we make it accessible in community practice?" — a transition from evidence generation to education strategy.',
+      summary: 'Anti-D compliance barriers have been a consistent theme since LP1 was established — cost and stock gaps recur across every measurement period despite MO1 being at Sufficient coverage overall.',
+      runningInsight: 'The question has shifted from "are obstetricians prescribing Anti-D?" to "can patients actually access and afford it once prescribed?" — a market-access question, not a clinical-education one.',
     },
   },
   LP2: {
     status: 'urgent',
     thisPeriod: {
-      summary: 'Five signals this period — highest volume of any KIQ. Hesitancy is consistently attributed to inertia, not clinical concern. The phrase "if it\'s not broken" appeared in three separate MSL reports from different regions. National alignment score for this question has regressed from 68 to 61.',
-      novaSynthesis: 'The core barrier is not knowledge of switching safety — it is the absence of a compelling framing for why to act when the status quo appears stable. Community-facing materials address the "what" but not the "why now."',
-      keyQuote: { text: 'If it\'s not broken, I\'m not going to fix it. My patients are stable and the infusion schedule is built into their routine.', msl: 'A. Krishnaswamy', territory: 'South (Bangalore)', date: '2026-06-10' },
-      actionPill: { insight: 'AI1', taken: true, label: 'Switch narrative reframed' },
+      summary: 'Two signals this period, both high-stakes. Top-tier KOLs are independently shortening GnRH agonist cycles with add-back therapy — and Dr. S. Meenakshi Sundaram\'s public shift toward a competitor\'s recombinant analogue (alignment 74→52) makes this the most urgent listening priority in the plan.',
+      novaSynthesis: 'Two distinct but related pressures are converging on MO2: a genuine clinical-practice evolution that BSV needs to support with data, and a competitive divergence that BSV needs to counter directly with priority KOL engagement. Both require action within the quarter.',
+      keyQuote: { text: 'The data from the GSK advisory was compelling on the purity profile. I\'m giving the new analogue a 6-month trial in my practice.', msl: 'P. Shenoy', territory: 'South (Chennai)', date: '2026-04-02' },
+      actionPill: { insight: 'AI5', taken: true, label: 'Priority MSL visit scheduled' },
     },
     cumulative: {
-      summary: 'This has been the most persistent KIQ across all periods. The switching inertia signal first appeared in Q3 2025 and has remained the highest-recurrence theme. Despite three intervention cycles, the national hesitancy rate has only declined from 74% to 61%.',
-      runningInsight: 'The question is evolving from "what are the barriers?" to "which levers move the needle?" — the evidence is that MSL conversation quality matters more than materials availability.',
+      summary: 'MO2 has been the lowest-coverage MO for two consecutive periods (Low status) — the Meenakshi Sundaram divergence signal has escalated since it was first flagged in April, making this the most time-sensitive open question in the plan.',
+      runningInsight: 'The question has moved from "are protocols evolving?" to "can BSV re-engage Dr. Sundaram before she formalises her switch?" — a narrow window that closes as her 6-month trial progresses.',
     },
   },
   LP3: {
     status: 'new',
     thisPeriod: {
-      summary: 'Three MSL reports from independent territories confirmed guideline steering members are receptive to strengthening the gMG position — but require refractory-subgroup data as the evidentiary basis. The ask is specific and actionable.',
-      novaSynthesis: 'A single high-value signal from a guideline steering member has catalysed three supporting field reports. The opportunity window is narrow — the next guideline review cycle is scheduled for late 2026.',
-      keyQuote: { text: 'Bring us the refractory subgroup data and we have something to work with. The current language is too hedged.', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-06-05' },
-      actionPill: { insight: 'AI3', taken: false, label: 'KOL dossier not yet initiated' },
+      summary: 'Four independent reports confirm the rFSH competitive narrative from ESHRE 2026 is spreading fast — IVF centre directors and reproductive endocrinologists across three cities are asking BSV for clinical equivalence data before they shift PCOS and stimulation protocols toward recombinant FSH.',
+      novaSynthesis: 'This is the highest-recurrence signal in the current cycle — Merck and Organon\'s ESHRE messaging has created real prescribing pressure, and every week without a BSV rebuttal increases the risk that Tier 1 IVF centres solidify a recombinant-first default.',
+      keyQuote: { text: 'The Gonal-f satellite had strong data. I need to see something from BSV before I shift my PCOS protocol.', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-07-05' },
+      actionPill: { insight: 'AI1', taken: false, label: 'Clinical equivalence one-pager in development' },
     },
     cumulative: {
-      summary: 'The guideline positioning question has generated 2 insights across 3 periods, both consistent in identifying the same evidentiary gap. Progress has been slow due to the long cycle time of guideline review processes.',
-      runningInsight: 'The question has narrowed from "is there an opportunity?" to "what evidence is needed and by when?" — urgency is increasing as the 2026 review window approaches.',
+      summary: 'The rFSH-vs-HMG preference question has been building since ESHRE 2026 concluded — the fastest-escalating listening priority in the current plan, moving from isolated comments to explicit clinical-equivalence requests within weeks.',
+      runningInsight: 'The question has sharpened from "is there competitive pressure?" to "how quickly can Cochrane-level evidence reach the IVF centres already leaning toward rFSH?"',
     },
   },
   LP4: {
-    status: 'none',
+    status: 'new',
     thisPeriod: {
-      summary: null,
-      novaSynthesis: null,
-      keyQuote: null,
-      actionPill: null,
-      emptyReason: 'No new insights generated this period. LP4 was probed in 2 MSL interactions, but neither produced a substantive response — HCPs deferred to the last congress update. Only 1 historical insight exists for this question (Q3 2025).',
+      summary: 'Gynecologic oncologists at HCG (Bangalore) and RGCI (Delhi) are independently asking BSV MSLs for ovarian protection data on Luprodex during chemotherapy — a net-new physician segment BSV\'s current MSL materials do not address.',
+      novaSynthesis: 'This is genuine market expansion, not a defensive signal — oncologists are proactively seeking BSV out for an indication current briefing materials do not cover. The opportunity is being left on the table purely due to a materials gap.',
+      keyQuote: { text: 'I want to protect ovarian function before CHOP. Can Luprodex do that? I need the literature.', msl: 'A. Krishnaswamy', territory: 'South (Bangalore)', date: '2026-06-25' },
+      actionPill: { insight: 'AI4', taken: false, label: 'Oncofertility briefing kit proposed' },
     },
     cumulative: {
-      summary: 'Only 1 insight generated since LP4 was established in Q2 2025. The question remains strategically important but MSL activation against it has been low. Territory coverage is uneven — only South (Bangalore) and West (Mumbai/Pune) have logged interactions on this topic.',
-      runningInsight: 'The question has not yet generated enough intelligence to establish a trajectory. Directed MSL activation is the priority before the next period.',
+      summary: 'LP4 has generated 1 insight since being established — its first period with any signal coverage, reflecting this genuinely new physician segment.',
+      runningInsight: 'The question is moving from "does an oncofertility opportunity exist?" to "how quickly can Medical Affairs build the briefing kit before oncologists look elsewhere?"',
     },
   },
   LP5: {
     status: 'new',
     thisPeriod: {
-      summary: 'Two MSL reports from West (Mumbai/Pune) and South (Chennai) confirmed community paediatricians lack long-term aHUS management data. Both HCPs cited the absence of 3-year retention data in a community-appropriate format as the specific gap.',
-      novaSynthesis: 'The pediatric evidence gap is both a data gap and a communication gap. The 3-year data exists but is not accessible to community paediatricians in a usable format.',
-      keyQuote: { text: 'I\'d enrol patients if I could show families a 3-year outcome summary they could understand. The trial data is too complex for a consult.', msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)', date: '2026-06-08' },
-      actionPill: { insight: 'AI5', taken: false, label: 'Registry sub-analysis proposed' },
+      summary: 'Three IVF lab directors at high-volume centres have independently asked BSV MSLs for batch-to-batch consistency data for Humog and Diva FSH — a direct response to Merck\'s Gonal-f messaging at ESHRE 2026.',
+      novaSynthesis: 'This is a targeted competitive rebuttal need, distinct from the broader rFSH-vs-HMG efficacy question in LP3 — lab directors are asking a narrower, more answerable question that a QA one-pager can resolve quickly.',
+      keyQuote: { text: 'Gonal-f reps claim their consistency is superior. I need to see your batch QC certificates.', msl: 'R. Mehta', territory: 'North (Delhi/Agra)', date: '2026-07-03' },
+      actionPill: { insight: 'AI7', taken: false, label: 'Batch QC summary card proposed' },
     },
     cumulative: {
-      summary: 'LP5 was established in Q4 2025. Two insights generated across 2 periods, both pointing to the same communication gap. Community-paediatrician engagement has been lower than academic centre engagement.',
-      runningInsight: 'The question is shifting from "what is the evidence gap?" to "how do we bridge academic evidence to community practice?" — an education strategy question, not an evidence generation question.',
+      summary: 'This is a newly-emerged signal this period — no prior measurement periods exist for this specific batch-consistency question, though it is closely related to the broader rFSH narrative tracked under LP3.',
+      runningInsight: 'The question is narrow and answerable: can BSV produce batch QC certificates fast enough to neutralise this specific competitive argument before it spreads to more centres?',
     },
   },
-};
-
-const LP6_MOCK = {
-  id: 'LP6', name: 'Scientific exchange barriers', moRef: 'MO4',
-  kiq: 'What barriers exist to peer-to-peer scientific exchange on complement biology?',
-  kits: ['Peer exchange protocol', 'KOL advisory panel'],
 };
 
 const STATUS_CONFIG = {
@@ -240,7 +233,7 @@ function InsightCard({ insight }) {
 function KIQMatrix() {
   const [openRow, setOpenRow] = useState(null);
 
-  const allLPs = [...LISTENING_PRIORITIES, LP6_MOCK];
+  const allLPs = LISTENING_PRIORITIES;
 
   return (
     <section>
@@ -380,11 +373,12 @@ export default function NovaTab3InsightIntelligence() {
           <span className="text-[10px] text-violet-500 ml-1">AI-generated · on load</span>
         </div>
         <p className="text-sm text-auri-text leading-relaxed">
-          This period, <strong>4 of 6 KIQs</strong> generated new insights. LP2 (switch-patient confidence) is flagged
-          <strong> Urgent</strong> — national alignment regressed from 68 to 61 despite active interventions.
-          LP4 (NMOSD treatment paradigm) and LP6 (scientific exchange barriers) have generated
-          no intelligence this cycle; directed MSL activation is recommended for both.
-          The highest-confidence insight this period is <strong>AI4</strong> (91% confidence, LP1/LP2 intersection).
+          This period, <strong>all 5 KIQs</strong> generated new insights. LP2 (GnRH agonist protocol confidence)
+          is flagged <strong>Urgent</strong> — Dr. S. Meenakshi Sundaram's public shift toward a competitor's
+          recombinant analogue requires priority MSL re-engagement before she formalises her practice change.
+          LP4 (Oncofertility awareness) is the newest listening priority to generate signal, reflecting a
+          genuinely new oncologist segment reaching out to BSV. The highest-confidence insight this period is
+          <strong> AI1</strong> (91% confidence, LP3) — the rFSH competitive narrative from ESHRE 2026.
         </p>
       </div>
 

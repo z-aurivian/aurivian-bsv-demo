@@ -13,15 +13,6 @@ import {
 
 const MSL_OPTIONS = ['D. Ramachandran — West (Mumbai/Pune)', 'R. Mehta — North (Delhi/Agra)', 'A. Krishnaswamy — South (Bangalore)', 'S. Pillai — East (Kolkata)', 'P. Shenoy — South (Chennai)', 'V. Nair — North (Lucknow)'];
 
-// LP6 is a mock gap row (mirrors NovaTab3InsightIntelligence's LP6_MOCK) — the
-// MO4 scientific-exchange listening priority has no ISP config entry because
-// it has never generated an insight.
-const LP6_MOCK = {
-  id: 'LP6', name: 'Scientific exchange barriers', moRef: 'MO4',
-  kiq: 'What barriers exist to peer-to-peer scientific exchange on complement biology?',
-  kits: ['Peer exchange protocol', 'KOL advisory panel'],
-};
-
 const MSL_PERFORMANCE = [
   { msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)',  status: 'Excellent',    interactions: 24, target: 20, delta: '+4', qualityScore: 82, kitSignals: 3, kolsAtRisk: 1, note: 'High interaction quality. Strong pediatric evidence focus.' },
   { msl: 'R. Mehta',        territory: 'North (Delhi/Agra)',  status: 'On track',     interactions: 19, target: 20, delta: '−1', qualityScore: 76, kitSignals: 5, kolsAtRisk: 2, note: 'Switch messaging delivery improving month-on-month.' },
@@ -832,24 +823,19 @@ function MSLView({ selectedMSL }) {
 
       {/* Listening Priorities */}
       <section>
-        <SectionHeader icon={BookOpen} label="Listening Priorities & KITs" sub="ISP config · LP1–LP6" right={<ExportBtn />} />
+        <SectionHeader icon={BookOpen} label="Listening Priorities & KITs" sub="ISP config · LP1–LP5" right={<ExportBtn />} />
         <div className="space-y-2">
-          {[...LISTENING_PRIORITIES, LP6_MOCK].map((lp) => {
-            const isGap = lp.id === 'LP6';
+          {LISTENING_PRIORITIES.map((lp) => {
             const insightCount = INSIGHTS.filter((i) => i.lpRefs?.includes(lp.id)).length;
             return (
-              <div key={lp.id} className={`rounded-xl border bg-auri-card p-4 ${isGap ? 'border-rose-200' : 'border-auri-border'}`}>
+              <div key={lp.id} className="rounded-xl border bg-auri-card p-4 border-auri-border">
                 <div className="flex items-start gap-3">
-                  <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${isGap ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-auri-text/5 text-auri-text border-auri-text/20'}`}>{lp.id}</span>
+                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 bg-auri-text/5 text-auri-text border-auri-text/20">{lp.id}</span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-sm font-medium text-auri-text">{lp.name}</span>
                       <span className="text-[10px] text-auri-muted">{lp.moRef}</span>
-                      {isGap ? (
-                        <span className="text-[10px] font-semibold text-rose-600">0 insights · MO gap</span>
-                      ) : (
-                        <span className="text-[10px] text-auri-muted">{insightCount} insight{insightCount === 1 ? '' : 's'} this cycle</span>
-                      )}
+                      <span className="text-[10px] text-auri-muted">{insightCount} insight{insightCount === 1 ? '' : 's'} this cycle</span>
                     </div>
                     <p className="text-xs text-auri-muted italic mb-1.5">"{lp.kiq}"</p>
                     <div className="flex flex-wrap gap-1">
