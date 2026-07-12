@@ -11,7 +11,7 @@ import {
 
 // ─── Mock data ─────────────────────────────────────────────────────────────
 
-const MSL_OPTIONS = ['D. Ramachandran — NE Region', 'R. Mehta — MW Region', 'A. Krishnaswamy — SE Region', 'S. Pillai — SW Region', 'P. Shenoy — NW Region'];
+const MSL_OPTIONS = ['D. Ramachandran — West (Mumbai/Pune)', 'R. Mehta — North (Delhi/Agra)', 'A. Krishnaswamy — South (Bangalore)', 'S. Pillai — East (Kolkata)', 'P. Shenoy — South (Chennai)', 'V. Nair — North (Lucknow)'];
 
 // LP6 is a mock gap row (mirrors NovaTab3InsightIntelligence's LP6_MOCK) — the
 // MO4 scientific-exchange listening priority has no ISP config entry because
@@ -23,11 +23,12 @@ const LP6_MOCK = {
 };
 
 const MSL_PERFORMANCE = [
-  { msl: 'D. Ramachandran', territory: 'NE Region', status: 'Excellent',    interactions: 24, target: 20, delta: '+4', qualityScore: 82, kitSignals: 3, kolsAtRisk: 1, note: 'High interaction quality. Strong pediatric evidence focus.' },
-  { msl: 'R. Mehta',   territory: 'MW Region', status: 'On track',     interactions: 19, target: 20, delta: '−1', qualityScore: 76, kitSignals: 5, kolsAtRisk: 2, note: 'Switch messaging delivery improving month-on-month.' },
-  { msl: 'A. Krishnaswamy',  territory: 'SE Region', status: 'Quality gap',  interactions: 21, target: 20, delta: '+1', qualityScore: 61, kitSignals: 2, kolsAtRisk: 3, note: 'Volume adequate, quality below target. KIT alignment coaching needed.' },
-  { msl: 'S. Pillai', territory: 'SW Region', status: 'Volume gap',   interactions: 14, target: 20, delta: '−6', qualityScore: 79, kitSignals: 1, kolsAtRisk: 1, note: 'Quality strong but interactions below target. Coverage review needed.' },
-  { msl: 'P. Shenoy',    territory: 'NW Region', status: 'Needs support',interactions: 12, target: 20, delta: '−8', qualityScore: 58, kitSignals: 2, kolsAtRisk: 4, note: 'Both volume and quality below target. Escalated to director.' },
+  { msl: 'D. Ramachandran', territory: 'West (Mumbai/Pune)',  status: 'Excellent',    interactions: 24, target: 20, delta: '+4', qualityScore: 82, kitSignals: 3, kolsAtRisk: 1, note: 'High interaction quality. Strong pediatric evidence focus.' },
+  { msl: 'R. Mehta',        territory: 'North (Delhi/Agra)',  status: 'On track',     interactions: 19, target: 20, delta: '−1', qualityScore: 76, kitSignals: 5, kolsAtRisk: 2, note: 'Switch messaging delivery improving month-on-month.' },
+  { msl: 'A. Krishnaswamy', territory: 'South (Bangalore)',   status: 'Quality gap',  interactions: 21, target: 20, delta: '+1', qualityScore: 61, kitSignals: 2, kolsAtRisk: 3, note: 'Volume adequate, quality below target. KIT alignment coaching needed.' },
+  { msl: 'S. Pillai',       territory: 'East (Kolkata)',      status: 'Volume gap',   interactions: 14, target: 20, delta: '−6', qualityScore: 79, kitSignals: 1, kolsAtRisk: 1, note: 'Quality strong but interactions below target. Coverage review needed.' },
+  { msl: 'P. Shenoy',       territory: 'South (Chennai)',     status: 'Needs support',interactions: 12, target: 20, delta: '−8', qualityScore: 58, kitSignals: 2, kolsAtRisk: 4, note: 'Both volume and quality below target. Escalated to director.' },
+  { msl: 'V. Nair',         territory: 'North (Lucknow)',     status: 'On track',     interactions: 22, target: 20, delta: '+2', qualityScore: 74, kitSignals: 3, kolsAtRisk: 2, note: 'Steady OBGYN-focused engagement across North India centres. KIT alignment strong.' },
 ];
 
 const MSL_STATUS_STYLE = {
@@ -61,57 +62,64 @@ const STAGE_LABELS = ['Unaware', 'Aware', 'Interested', 'Evaluating', 'Committed
 // messaging-alignment.js uses for the current-quarter numbers.
 
 const NATIONAL_METRICS = [
-  { label: 'Total MSL interactions', value: '90', sub: 'this cycle' },
-  { label: 'Avg quality score', value: '71', sub: 'target: 75' },
-  { label: 'Insight capture rate', value: '62%', sub: '+4% vs prior' },
-  { label: 'KOLs at risk', value: '11', sub: 'tier 1 / tier 2', alert: true },
+  { label: 'Total MSL interactions', value: '112', sub: 'this cycle' },
+  { label: 'Avg quality score', value: '72', sub: 'target: 75' },
+  { label: 'Insight capture rate', value: '63%', sub: '+5% vs prior' },
+  { label: 'KOLs at risk', value: '13', sub: 'tier 1 / tier 2', alert: true },
 ];
 
-const TERRITORY_LIST = ['NE Region', 'MW Region', 'SE Region', 'SW Region', 'NW Region'];
+const TERRITORY_LIST = ['West (Mumbai/Pune)', 'North (Delhi/Agra)', 'South (Bangalore)', 'East (Kolkata)', 'South (Chennai)', 'North (Lucknow)'];
 
 // Per-territory HCP topics (scoped subset of national data)
 const TERRITORY_HCP_TOPICS = {
-  'NE Region': [
+  'West (Mumbai/Pune)': [
     { topic: 'Ultomiris switch benefit', hcpCount: 14, stages: [2, 3, 5, 3, 1], avgStage: 3.1, trend: '+0.6', confirmed: 8 },
     { topic: 'NMOSD long-term RWE',     hcpCount: 9,  stages: [4, 2, 2, 1, 0], avgStage: 2.1, trend: '+0.2', confirmed: 2 },
     { topic: 'Pediatric evidence',       hcpCount: 6,  stages: [1, 2, 2, 1, 0], avgStage: 2.5, trend: '+0.4', confirmed: 3 },
   ],
-  'MW Region': [
+  'North (Delhi/Agra)': [
     { topic: 'Ultomiris switch benefit', hcpCount: 12, stages: [3, 4, 4, 1, 0], avgStage: 2.6, trend: '+0.3', confirmed: 5 },
     { topic: 'NMOSD long-term RWE',     hcpCount: 8,  stages: [4, 2, 1, 1, 0], avgStage: 2.0, trend: '+0.1', confirmed: 2 },
     { topic: 'C5 inhibition in gMG',    hcpCount: 7,  stages: [2, 2, 2, 1, 0], avgStage: 2.3, trend: '+0.2', confirmed: 3 },
   ],
-  'SE Region': [
+  'South (Bangalore)': [
     { topic: 'C5 inhibition in gMG',    hcpCount: 11, stages: [1, 2, 4, 3, 1], avgStage: 3.2, trend: '+0.5', confirmed: 6 },
     { topic: 'Ultomiris switch benefit', hcpCount: 9,  stages: [2, 3, 3, 1, 0], avgStage: 2.5, trend: '+0.2', confirmed: 4 },
     { topic: 'NMOSD long-term RWE',     hcpCount: 6,  stages: [3, 2, 1, 0, 0], avgStage: 1.7, trend: '−0.1', confirmed: 1 },
   ],
-  'SW Region': [
+  'East (Kolkata)': [
     { topic: 'Ultomiris switch benefit', hcpCount: 8,  stages: [1, 2, 3, 2, 0], avgStage: 2.8, trend: '+0.4', confirmed: 3 },
     { topic: 'C5 inhibition in gMG',    hcpCount: 5,  stages: [1, 2, 1, 1, 0], avgStage: 2.4, trend: '+0.3', confirmed: 2 },
     { topic: 'NMOSD long-term RWE',     hcpCount: 4,  stages: [2, 1, 1, 0, 0], avgStage: 1.8, trend: '0.0',  confirmed: 1 },
   ],
-  'NW Region': [
+  'South (Chennai)': [
     { topic: 'Ultomiris switch benefit', hcpCount: 5,  stages: [2, 1, 1, 1, 0], avgStage: 2.2, trend: '−0.1', confirmed: 2 },
     { topic: 'NMOSD long-term RWE',     hcpCount: 4,  stages: [2, 1, 1, 0, 0], avgStage: 1.8, trend: '0.0',  confirmed: 1 },
     { topic: 'C5 inhibition in gMG',    hcpCount: 3,  stages: [1, 1, 1, 0, 0], avgStage: 2.0, trend: '−0.2', confirmed: 1 },
   ],
+  'North (Lucknow)': [
+    { topic: 'Ultomiris switch benefit', hcpCount: 13, stages: [3, 3, 4, 2, 1], avgStage: 2.7, trend: '+0.3', confirmed: 6 },
+    { topic: 'NMOSD long-term RWE',     hcpCount: 8,  stages: [3, 2, 2, 1, 0], avgStage: 2.0, trend: '+0.1', confirmed: 2 },
+    { topic: 'Pediatric evidence',       hcpCount: 5,  stages: [1, 1, 2, 1, 0], avgStage: 2.4, trend: '+0.2', confirmed: 2 },
+  ],
 };
 
 const TERRITORY_KIT_COVERAGE = {
-  'NE Region': [true,  true,  true,  false, false],
-  'MW Region': [true,  true,  false, false, false],
-  'SE Region': [true,  true,  true,  false, false],
-  'SW Region': [true,  false, false, false, false],
-  'NW Region': [false, false, false, false, false],
+  'West (Mumbai/Pune)': [true,  true,  true,  false, false],
+  'North (Delhi/Agra)': [true,  true,  false, false, false],
+  'South (Bangalore)':  [true,  true,  true,  false, false],
+  'East (Kolkata)':     [true,  false, false, false, false],
+  'South (Chennai)':    [false, false, false, false, false],
+  'North (Lucknow)':    [true,  true,  false, false, false],
 };
 
 const TERRITORY_BRIEFS = {
-  'NE Region': 'NE Region is the strongest-performing territory this cycle — 24 interactions, quality score 82. D. Ramachandran is driving KIT signal coverage across 3 topics. Pediatric evidence (LP5) is the standout theme: 3 MSL interactions captured this cycle alone. One tier-1 KOL has shown a strong positive alignment shift this quarter — see Scientific Alignment Shift below. No KOL engagement gaps.',
-  'MW Region': 'MW Region is on track with 19 interactions and quality score 76. Switch messaging delivery (MO2) is improving. 5 KIT signals captured — highest in any territory this cycle. Two tier-1 KOLs are at engagement risk (>45 days since last contact). Switch inertia remains the dominant theme: "if it\'s not broken" appeared in 3 separate field reports.',
-  'SE Region': 'SE Region shows a quality gap — 21 interactions (above target) but quality score of 61, below the 75 threshold. A. Krishnaswamy has strong congress-sourced signal capture but KIT alignment in MSL interactions is inconsistent. Three KOLs at engagement risk. C5 in gMG is the strongest awareness topic with the highest avg stage nationally (3.2).',
-  'SW Region': 'SW Region is showing a volume gap — only 14 interactions against a target of 20. Quality score is strong at 79. One tier-1 KOL at risk. S. Pillai has captured the highest per-interaction quality in the team but needs territory coverage expansion. Patient advocacy signals are emerging.',
-  'NW Region': 'NW Region requires immediate support — 12 interactions (60% of target) and quality score 58. P. Shenoy has 4 tier-1/2 KOLs with no substantive contact in the past 60 days. KIT coverage dots are below all other territories. Escalated to field director. Director brief and coaching plan recommended before next cycle.',
+  'West (Mumbai/Pune)': 'West (Mumbai/Pune) is the strongest-performing territory this cycle — 24 interactions, quality score 82. D. Ramachandran is driving KIT signal coverage across 3 topics. Pediatric evidence (LP5) is the standout theme: 3 MSL interactions captured this cycle alone. One tier-1 KOL has shown a strong positive alignment shift this quarter — see Scientific Alignment Shift below. No KOL engagement gaps.',
+  'North (Delhi/Agra)': 'North (Delhi/Agra) is on track with 19 interactions and quality score 76. Switch messaging delivery (MO2) is improving. 5 KIT signals captured — highest in any territory this cycle. Two tier-1 KOLs are at engagement risk (>45 days since last contact). Switch inertia remains the dominant theme: "if it\'s not broken" appeared in 3 separate field reports.',
+  'South (Bangalore)': 'South (Bangalore) shows a quality gap — 21 interactions (above target) but quality score of 61, below the 75 threshold. A. Krishnaswamy has strong congress-sourced signal capture but KIT alignment in MSL interactions is inconsistent. Three KOLs at engagement risk. C5 in gMG is the strongest awareness topic with the highest avg stage nationally (3.2).',
+  'East (Kolkata)': 'East (Kolkata) is showing a volume gap — only 14 interactions against a target of 20. Quality score is strong at 79. One tier-1 KOL at risk. S. Pillai has captured the highest per-interaction quality in the team but needs territory coverage expansion. Patient advocacy signals are emerging.',
+  'South (Chennai)': 'South (Chennai) requires immediate support — 12 interactions (60% of target) and quality score 58. P. Shenoy has 4 tier-1/2 KOLs with no substantive contact in the past 60 days. KIT coverage dots are below all other territories. Escalated to field director. Director brief and coaching plan recommended before next cycle.',
+  'North (Lucknow)': 'North (Lucknow) is performing steadily — 22 interactions against a target of 20, quality score 74. V. Nair has strong OBGYN-network engagement and consistent KIT signal capture across 3 topics. Two tier-1/2 KOLs are at moderate engagement risk. Pediatric evidence remains an active listening theme this cycle.',
 };
 
 const MO_FIELD_DATA = {
@@ -186,7 +194,7 @@ function ExportBtn() {
 
 function FieldBrief({ scope }) {
   const briefs = {
-    national: 'National field performance is tracking at 71/100 quality score, 4 points below target. Switching messaging (MO2) shows the strongest field signal activity — 41 interactions and 3 insights captured this cycle. KOL engagement risk is elevated in the NW territory: 4 tier-1 KOLs have had no substantive contact in the past 60 days. The NMOSD sequencing question (LP4) continues to generate low interaction volumes — directed MSL activation recommended.',
+    national: 'National field performance is tracking at 72/100 quality score, 3 points below target. Switching messaging (MO2) shows the strongest field signal activity — 41 interactions and 3 insights captured this cycle. KOL engagement risk is elevated in the South (Chennai) territory: 4 tier-1 KOLs have had no substantive contact in the past 60 days. The NMOSD sequencing question (LP4) continues to generate low interaction volumes — directed MSL activation recommended.',
     msl: 'Individual MSL brief — summarising KIT alignment, listening priority coverage, and HCP impact for the selected territory.',
   };
   return (
@@ -382,8 +390,8 @@ function NationalView() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex gap-1">
-                        {['NE', 'MW', 'SE', 'SW', 'NW'].map((t, i) => (
-                          <div key={t} className={`w-7 h-7 rounded text-[9px] font-medium flex items-center justify-center ${i < 3 ? 'bg-auri-text text-auri-bg' : 'bg-auri-border text-auri-muted'}`}>{t}</div>
+                        {['DR', 'RM', 'AK', 'SP', 'PS', 'VN'].map((t, i) => (
+                          <div key={t} className={`w-7 h-7 rounded text-[9px] font-medium flex items-center justify-center ${i < 4 ? 'bg-auri-text text-auri-bg' : 'bg-auri-border text-auri-muted'}`}>{t}</div>
                         ))}
                       </div>
                     </td>
@@ -440,7 +448,7 @@ function NationalView() {
 // ─── Territory view (Phase 2 placeholder) ─────────────────────────────────
 
 function TerritoryView() {
-  const [territory, setTerritory] = useState('NE Region');
+  const [territory, setTerritory] = useState('West (Mumbai/Pune)');
   const [openTopic, setOpenTopic] = useState(null);
 
   const msl = MSL_PERFORMANCE.find((m) => m.territory === territory) || MSL_PERFORMANCE[0];

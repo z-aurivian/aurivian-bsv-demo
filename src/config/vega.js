@@ -12,13 +12,14 @@ export const VEGA_AWARENESS_PROGRESSION = {
 };
 
 export const VEGA_INTERACTION_QUALITY = {
-  insight: 'Rahul M shows high interaction volume but low insight rate — likely spending visit time on product features rather than scientific exchange on KIQs. Recommended: coaching on LP1 (Anti-D compliance barriers) and LP3 (fertility stimulation preferences). Priya S shows quality-volume gap — regional manager support needed before NABICON 2026.',
+  insight: 'Dr. Rahul Mehta shows high interaction volume but low insight rate — likely spending visit time on product features rather than scientific exchange on KIQs. Recommended: coaching on LP1 (Anti-D compliance barriers) and LP3 (fertility stimulation preferences). Dr. Priya Shenoy shows quality-volume gap — regional manager support needed before NABICON 2026.',
   rows: [
-    { msl: 'Divya R',  region: 'West (Mumbai/Pune)',  interactions: 51, vsTarget: '+4%',  quality: 8.8, insightRate: 84, overall: 'Excellent' },
-    { msl: 'Rahul M',  region: 'North (Delhi/Agra)',  interactions: 58, vsTarget: '+18%', quality: 6.0, insightRate: 41, overall: 'Quality gap' },
-    { msl: 'Anita K',  region: 'South (Bangalore)',   interactions: 42, vsTarget: '+5%',  quality: 9.2, insightRate: 88, overall: 'Excellent' },
-    { msl: 'Suresh P', region: 'East (Kolkata)',       interactions: 36, vsTarget: '-10%', quality: 8.1, insightRate: 74, overall: 'Volume gap' },
-    { msl: 'Priya S',  region: 'South (Chennai)',      interactions: 27, vsTarget: '-33%', quality: 5.4, insightRate: 33, overall: 'Needs support' },
+    { msl: 'Dr. Divya Ramachandran',  region: 'West (Mumbai/Pune)',  interactions: 51, vsTarget: '+4%',  quality: 8.8, insightRate: 84, overall: 'Excellent' },
+    { msl: 'Dr. Rahul Mehta',         region: 'North (Delhi/Agra)',  interactions: 58, vsTarget: '+18%', quality: 6.0, insightRate: 41, overall: 'Quality gap' },
+    { msl: 'Dr. Anita Krishnaswamy',  region: 'South (Bangalore)',   interactions: 42, vsTarget: '+5%',  quality: 9.2, insightRate: 88, overall: 'Excellent' },
+    { msl: 'Dr. Suresh Pillai',       region: 'East (Kolkata)',      interactions: 36, vsTarget: '-10%', quality: 8.1, insightRate: 74, overall: 'Volume gap' },
+    { msl: 'Dr. Priya Shenoy',        region: 'South (Chennai)',     interactions: 27, vsTarget: '-33%', quality: 5.4, insightRate: 33, overall: 'Needs support' },
+    { msl: 'Dr. Vikram Nair',         region: 'North (Lucknow)',     interactions: 45, vsTarget: '+2%',  quality: 8.4, insightRate: 76, overall: 'On track' },
   ],
 };
 
